@@ -1,11 +1,14 @@
 import { Response, Request } from "express"
 import { GeneraError } from "../../core"
 import { RegistroUsusarioDto } from "../../core/DTOS/auteticacion/registro-usuario.dto";
+import { AutenticacionServicio } from "../services/autenticacion.service";
 
 
 export class AutenticacionControlador {
 
-    constructor(){}
+    constructor(
+        public readonly autentucacionServicio: AutenticacionServicio,
+    ){}
 
     private manejadorErrores = ( error: unknown, res:Response ) =>{
 
@@ -20,9 +23,12 @@ export class AutenticacionControlador {
 
     registroUsuario = ( req:Request, res:Response ) =>{
         const[ error, registroDto ] = RegistroUsusarioDto.crear( req.body );
+        console.log(req.body)
         if( error ) return res.status( 400 ).json( { error } );
 
-        // this.
+        this.autentucacionServicio.registroUsuario( registroDto! )
+        .then( ( usuario ) => res.json( usuario ) )
+        .catch( error => this.manejadorErrores( error, res ) )
         
     }
     

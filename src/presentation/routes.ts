@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import { AutenticacionControlador } from './auth/controlador';
-import { AutenticacionRutas } from './auth/rutas';
 
+
+import { Router } from 'express';
+import { AutenticacionRutas } from './auth/rutas';
 
 
 
