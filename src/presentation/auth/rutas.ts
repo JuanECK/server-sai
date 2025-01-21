@@ -14,6 +14,7 @@ export class AutenticacionRutas {
 
         router.post('/login', controlador.accesoUsuario);
         router.post('/registro',controlador.registroUsuario);
+        router.post('/usuarios',controlador.getUsuarios);
 
         
         return router

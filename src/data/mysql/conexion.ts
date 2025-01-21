@@ -1,40 +1,86 @@
-import mysql from 'mysql2';
+
+import { Sequelize } from 'sequelize';
 
 interface Options {
-    host:string,
-    user:string,
-    password:string,
-    database:string,
-}
+        host:string,
+        user:string,
+        password:string,
+        database:string,
+    }
+    export class MySqlConnect {
 
-export class MySqlConnect {
-
-static async connect( options:Options ) {
-    const { host, user, password, database } =  options;
-
-        try {
+        static async connect( options:Options ) {
+            const { host, user, password, database } =  options;
             
-            await mysql.createConnection( 
+            const sequelize = new Sequelize(
+                database, 
+                user, 
+                password,
                 {
+                host,
+                dialect:'mysql',
+                // logging:false
+                }
+             )
 
-                    host:'',
-                    user:'',
-                    password:'',
-                    database:'',
+                try {
+                    await sequelize.authenticate();
+                    
+                    console.log('conectado DB')
+                    return true
 
-            } 
-        )
+                } catch (error) {
+                    console.log('Error con la coneccion de MySql');
+                    throw error;
+                }
 
-        return true
-
-        } catch (error) {
-            console.log('Error con la coneccion de MySql');
-            throw error;
-        }
+            }
 
     }
 
-}
+
+
+// import mysql from 'mysql2/promise';
+
+// interface Options {
+//     host:string,
+//     user:string,
+//     password:string,
+//     database:string,
+// }
+
+// export class MySqlConnect {
+
+// static async connect( options:Options ) {
+//     const { host, user, password, database } =  options;
+
+//         try {
+            
+//             await mysql.createConnection(
+//                 {
+
+//                     host,
+//                     user,
+//                     password,
+//                     database,
+
+//             } 
+//         )
+
+//         console.log('conectado DB')
+//         return true
+
+//         } catch (error) {
+//             console.log('Error con la coneccion de MySql');
+//             throw error;
+//         }
+
+//     }
+//     //   static async disconnect(){
+//     //     await mysql.end;
+//     //   }
+
+// }
 
 
 // const db = mysql.createConnection(
