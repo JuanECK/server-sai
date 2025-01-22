@@ -1,8 +1,8 @@
 import { Response, Request } from "express"
-import { GeneraError } from "../../core"
+import { GeneraError, LoginUsusarioDto } from "../../core"
 import { RegistroUsusarioDto } from "../../core/DTOS/auteticacion/registro-usuario.dto";
 import { AutenticacionServicio } from "../services/autenticacion.service";
-import { Usuario } from "../../data/mysql/model/usuario.model";
+import   UsuarioModelo   from "../../data/mysql/model/usuario.model";
 import { db } from "../../data/mysql/db/coneccion";
 
 
@@ -25,22 +25,30 @@ export class AutenticacionControlador {
 
     registroUsuario = ( req:Request, res:Response ) =>{
         const[ error, registroDto ] = RegistroUsusarioDto.crear( req.body );
-        console.log(req.body)
         if( error ) return res.status( 400 ).json( { error } );
 
+
         this.autentucacionServicio.registroUsuario( registroDto! )
-        .then( ( usuario ) => res.json( usuario ) )
+        .then( ( usuario ) => res.status(200).json({message: 'Usuario creado con exito'}) )
+        // .then( ( usuario ) => res.json( usuario ) )
         .catch( error => this.manejadorErrores( error, res ) )
         
+        // res.json('registro de usuario')
     }
     
     accesoUsuario = ( req:Request, res:Response ) => {
-        res.json('acceso de usuario')
+         const[ error, loginUserDto ] = LoginUsusarioDto.crear( req.body );
+         if( error ) return res.status( 400 ).json( { error } )
+
+        this.autentucacionServicio.accesoUsuario( loginUserDto! )
+        .then( ( usuario ) => res.json( usuario ) )
+        .catch( error => this.manejadorErrores( error, res )
+         );
 
     }
-    getUsuarios = ( req:Request, res:Response ) => {
-        // const usuarios = Usuario.findAll()
-        const usuarios = db.query('SELECT * FROM Usuario') ;
+    getUsuarios = async ( req:Request, res:Response ) => {
+        const usuarios = await UsuarioModelo.findAll()
+        // const usuarios = await db.query('SELECT * FROM Usuario') ;
         res.json(usuarios)
 
     }

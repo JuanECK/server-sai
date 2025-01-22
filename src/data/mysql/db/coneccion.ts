@@ -9,11 +9,16 @@ import { envs } from '../../../config';
                 envs.MSQL_DATABASE, 
                 envs.MSQL_USER,
                 envs.MSQL_PASSWORD,
+                
                     {
                     host: envs.MSQL_HOST,
                     dialect:'mysql',
                     // logging:false
+                    define: {
+                        timestamps: false
+                    },
                     }
+                    
             )
     
 
