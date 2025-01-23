@@ -2,7 +2,7 @@
 
 import { Router } from 'express';
 import { AutenticacionRutas } from './auth/rutas';
-
+import cors from 'cors';
 
 
 export class AppRoutes {
@@ -11,9 +11,9 @@ export class AppRoutes {
   static get routes(): Router {
 
     const router = Router();
-    
+
     // Definir las rutas
-    router.use('/api/auth', AutenticacionRutas.routes );
+    router.use('/', AutenticacionRutas.routes );
 
 
 

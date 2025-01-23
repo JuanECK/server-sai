@@ -4,6 +4,8 @@ import { RegistroUsusarioDto } from "../../core/DTOS/auteticacion/registro-usuar
 import { AutenticacionServicio } from "../services/autenticacion.service";
 import   UsuarioModelo   from "../../data/mysql/model/usuario.model";
 import { db } from "../../data/mysql/db/coneccion";
+// import { CookieAdapter } from "../../config";
+// import  CookieParser from 'cookie-parser'
 
 
 export class AutenticacionControlador {
@@ -41,7 +43,10 @@ export class AutenticacionControlador {
          if( error ) return res.status( 400 ).json( { error } )
 
         this.autentucacionServicio.accesoUsuario( loginUserDto! )
-        .then( ( usuario ) => res.json( usuario ) )
+        .then( ( usuario ) => res.status(200).json({Messaje:'session', Token: usuario.token, Options:{httpOnly: true, sameSite: 'strict'}} ) )
+        // .then( ( usuario ) => res.cookie( 'session', usuario.token, {httpOnly: true, sameSite: 'strict'}) )
+        //    CookieAdapter.setCookie( res, 'sesion',usuario.token.toString() , { httpOnly: true, sameSite: 'strict' } );
+        // .then( ( usuario ) => res.json( usuario ) )
         .catch( error => this.manejadorErrores( error, res )
          );
 

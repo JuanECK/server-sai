@@ -12,7 +12,7 @@ export class AutenticacionRutas {
         const autenticacionServicio = new AutenticacionServicio()
         const controlador = new AutenticacionControlador( autenticacionServicio );
 
-        router.get('/login', controlador.accesoUsuario);
+        router.post('/login', controlador.accesoUsuario);
         router.post('/registro',controlador.registroUsuario);
         router.get('/usuario',controlador.getUsuarios);
 

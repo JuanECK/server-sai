@@ -1,7 +1,10 @@
 
 import { regularExpsEmail } from "../../../config";
-
-
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+//---------------PARA EVALUAR QUE LOS DATOS QUE EL USUARIO ENVIA SEAN CORRECTOS-------------------
+//------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
 export class RegistroUsusarioDto {
 
     private constructor(
@@ -16,7 +19,8 @@ export class RegistroUsusarioDto {
     ){}
 
     static crear( objeto: { [key:string]:any } ):[string?, RegistroUsusarioDto?]{
-        const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario, createAt  = new Date().toLocaleString(), } = objeto;
+        // const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario, createAt, } = objeto;
+        const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario, createAt = new Date().toLocaleString() } = objeto;
 
         if( !Nombre_Completo ) return ['Falta el Nombre'];
         if( !Area ) return ['Falta el Area'];
