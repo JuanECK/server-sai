@@ -39,17 +39,24 @@ export class AutenticacionControlador {
     }
     
     accesoUsuario = ( req:Request, res:Response ) => {
+        console.log(req.body)
+        
          const[ error, loginUserDto ] = LoginUsusarioDto.crear( req.body );
          if( error ) return res.status( 400 ).json( { error } )
-
-        this.autentucacionServicio.accesoUsuario( loginUserDto! )
-        .then( ( usuario ) => res.status(200).json({Messaje:'session', Token: usuario.token, Options:{httpOnly: true, sameSite: 'strict'}} ) )
+        
+            
+            this.autentucacionServicio.accesoUsuario( loginUserDto! )
+            // res.cookie('cookie', 'usuario.token')
+        // .then( ( usuario ) => res.cookie('cookie', 'usuario.token',{path:'/', }))
         // .then( ( usuario ) => res.cookie( 'session', usuario.token, {httpOnly: true, sameSite: 'strict'}) )
-        //    CookieAdapter.setCookie( res, 'sesion',usuario.token.toString() , { httpOnly: true, sameSite: 'strict' } );
-        // .then( ( usuario ) => res.json( usuario ) )
-        .catch( error => this.manejadorErrores( error, res )
-         );
+        // //    CookieAdapter.setCookie( res, 'sesion',usuario.token.toString() , { httpOnly: true, sameSite: 'strict' } );
+        .then( ( usuario ) => res.status(200).json( usuario ) )
+        // .then((result) => {res.cookie('cookie', 'usuario.token',{path:'/', })})
+        // .cookie('asses','userToken,{httpOnly: ture}')
+        .catch( error => this.manejadorErrores( error, res ))
+        //  );
 
+        //  res.cookie('cookie', 'usuario.token')
     }
     getUsuarios = async ( req:Request, res:Response ) => {
         const usuarios = await UsuarioModelo.findAll()

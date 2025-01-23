@@ -36,6 +36,8 @@ export class Server {
   // }
 
   this.app.use(cors());
+  // this.app.use(cookieParser())
+
   // this.app.use(
   //   cors({
   //       origin: "http://localhost:3000",
@@ -45,7 +47,7 @@ export class Server {
  
     this.app.use( express.json() ); // raw
     this.app.use( express.urlencoded({ extended: true }) ); // x-www-form-urlencoded
-    this.app.use(cookieParser())
+    // this.app.use(cookieParser())
 
     //* Public Folder
     this.app.use( express.static( this.publicPath ) );
