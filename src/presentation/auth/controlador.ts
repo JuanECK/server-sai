@@ -31,8 +31,8 @@ export class AutenticacionControlador {
 
 
         this.autentucacionServicio.registroUsuario( registroDto! )
-        .then( ( usuario ) => res.status(200).json({message: 'Usuario creado con exito'}) )
-        // .then( ( usuario ) => res.json( usuario ) )
+        // .then( ( usuario ) => res.status(200).json({message: 'Usuario creado con exito'}) )
+        .then( ( usuario ) => res.json( usuario ) )
         .catch( error => this.manejadorErrores( error, res ) )
         
         // res.json('registro de usuario')
@@ -44,7 +44,6 @@ export class AutenticacionControlador {
          const[ error, loginUserDto ] = LoginUsusarioDto.crear( req.body );
          if( error ) return res.status( 400 ).json( { error } )
         
-            
             this.autentucacionServicio.accesoUsuario( loginUserDto! )
             // res.cookie('cookie', 'usuario.token')
         // .then( ( usuario ) => res.cookie('cookie', 'usuario.token',{path:'/', }))
