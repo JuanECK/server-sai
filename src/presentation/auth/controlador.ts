@@ -29,38 +29,38 @@ export class AutenticacionControlador {
         const[ error, registroDto ] = RegistroUsusarioDto.crear( req.body );
         if( error ) return res.status( 400 ).json( { error } );
 
-
         this.autentucacionServicio.registroUsuario( registroDto! )
-        // .then( ( usuario ) => res.status(200).json({message: 'Usuario creado con exito'}) )
         .then( ( usuario ) => res.json( usuario ) )
         .catch( error => this.manejadorErrores( error, res ) )
-        
-        // res.json('registro de usuario')
     }
     
     accesoUsuario = ( req:Request, res:Response ) => {
         console.log(req.body)
         
-         const[ error, loginUserDto ] = LoginUsusarioDto.crear( req.body );
-         if( error ) return res.status( 400 ).json( { error } )
+        const[ error, loginUserDto ] = LoginUsusarioDto.crear( req.body );
+        if( error ) return res.status( 400 ).json( { error } )
         
-            this.autentucacionServicio.accesoUsuario( loginUserDto! )
-            // res.cookie('cookie', 'usuario.token')
-        // .then( ( usuario ) => res.cookie('cookie', 'usuario.token',{path:'/', }))
-        // .then( ( usuario ) => res.cookie( 'session', usuario.token, {httpOnly: true, sameSite: 'strict'}) )
-        // //    CookieAdapter.setCookie( res, 'sesion',usuario.token.toString() , { httpOnly: true, sameSite: 'strict' } );
+        this.autentucacionServicio.accesoUsuario( loginUserDto! )
         .then( ( usuario ) => res.status(200).json( usuario ) )
-        // .then((result) => {res.cookie('cookie', 'usuario.token',{path:'/', })})
-        // .cookie('asses','userToken,{httpOnly: ture}')
         .catch( error => this.manejadorErrores( error, res ))
-        //  );
-
-        //  res.cookie('cookie', 'usuario.token')
     }
+
+    sessionUsuario = ( req:Request, res:Response ) => {
+        const { Token } = req.body;
+
+        this.autentucacionServicio.sessionUsuario( Token )
+        .then( ( user ) => res.json( user ) )
+        .catch( error => this.manejadorErrores( error, res ) ) 
+        
+        // res.status(200).json({respuesta:true})
+        // res.status(400).json('no')
+    }
+
     getUsuarios = async ( req:Request, res:Response ) => {
-        const usuarios = await UsuarioModelo.findAll()
-        // const usuarios = await db.query('SELECT * FROM Usuario') ;
-        res.json(usuarios)
+        // const usuarios = await UsuarioModelo.findAll()
+        const usuarios = await db.query('SELECT * FROM Usuario') ;
+        const data = usuarios[0]
+        res.json(data)
 
     }
 }

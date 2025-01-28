@@ -19,10 +19,11 @@ export class AutenticacionRutas {
         // });
 
         router.post('/login', controlador.accesoUsuario);
+        router.post('/validaSession', controlador.sessionUsuario);
         router.post('/registro',controlador.registroUsuario);
         router.get('/usuario',controlador.getUsuarios);
 
-        
+    
         return router
     }
 }
