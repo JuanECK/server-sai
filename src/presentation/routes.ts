@@ -2,7 +2,7 @@
 
 import { Router } from 'express';
 import { AutenticacionRutas } from './auth/rutas';
-import cors from 'cors';
+// import cors from 'cors';
 
 
 export class AppRoutes {

@@ -106,4 +106,64 @@ export class AutenticacionServicio {
 
         return {respuesta:true}
     }
+
+    public async coockie ( coockie:string ){
+        const payload = await JwtAdapter.validateToken( coockie );
+        if( !payload ) throw GeneraError.noAutorizado( 'token invalido' );
+
+        return {respuesta:true}
+        // console.log({esta:coockie})
+        
+        // return {
+        //     user: 'Juan', loged: true
+        // }
+    }
+
+    public async iniciarSession ( loginUsusarioDto:LoginUsusarioDto ) {
+
+
+        const{ Usuario } = loginUsusarioDto
+        
+        //consulta usando mysql2
+        // const usuario = await UsuarioModelo.findOne( { where: { Usuario } } )
+    
+        // consulta usando procedimientos establecidos en MySQL
+        const sql = 'CALL sp_valida_usuario(:Usuario)';
+        const usuario = await db.query( sql, { replacements: { Usuario:Usuario } } );
+        
+        const resultado = JSON.parse(JSON.stringify(usuario))
+        const data = resultado[0]
+
+        if( !data ) throw GeneraError.badRespuesta( 'El E-mail no existe' );
+
+        const isMaching = bcryptAdapter.compare( loginUsusarioDto.Contrasenia, data.Contrasenia );
+        if( !isMaching ) throw GeneraError.badRespuesta( 'El password es incorrecto' );
+
+        const { Contrasenia, ...usuarioEntidad } = UsuarioEntidad.formularioObjeto( data );
+
+        const token = await JwtAdapter.generateToken({ Id:data.Id_User, usuario: resultado.Nombre_Completo, sesion: data.Clave_Usuario });
+        if ( !token ) throw GeneraError.servidorInterno( 'Error while creating JWT' );
+
+        return {
+
+        user: usuarioEntidad,
+        token
+
+        }
+
+
+        // return
+
+        //     res.cookie("x-auth-token", 'juaaaaan', {
+        //           httpOnly: true,
+        //         //   expires: new Date(Date.now() + 900000),
+        //           sameSite: "strict",
+        //           secure: true,
+        //         //   priority:"high"
+        //         });
+
+        //     return res
+        //     .status(200)
+        //     .json({user: 'Juan', loged: true})  
+    }
 }

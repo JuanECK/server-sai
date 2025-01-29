@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
+import cookieSession from 'cookie-session'
 import cors from 'cors';
 
 interface Options {
@@ -29,14 +30,14 @@ export class Server {
   async start() {
 
     
-  //   const corsOptions = {
-  //     origin: 'http://127.0.0.1:3000',
-  //     credentials:true,  
-  //     optionsSuccessStatus: 200 // For legacy browser support
-  // }
+    const corsOptions = {
+      origin: 'http://localhost:4200',
+      credentials:true,  
+      optionsSuccessStatus: 200 // For legacy browser support
+  }
 
-  this.app.use(cors());
-  // this.app.use(cookieParser())
+  this.app.use(cors(corsOptions));
+  this.app.use(cookieParser())
 
   // this.app.use(
   //   cors({
@@ -45,6 +46,11 @@ export class Server {
   //   })
   // );
  
+  // this.app.use(cookieSession({
+  //   name: 'session',
+  //   keys: ['key1', 'key2']
+  // }))
+
     this.app.use( express.json() ); // raw
     this.app.use( express.urlencoded({ extended: true }) ); // x-www-form-urlencoded
     // this.app.use(cookieParser())
@@ -60,14 +66,20 @@ export class Server {
     //* SPA /^\/(?!api).*/  <== Únicamente si no empieza con la palabra api
     // this.app.get('*', (req, res, next) => {
     this.app.get('/', (req, res) => {
+      // res.header("Access-Control-Allow-Origin", "http://localhost:3000/");
+      // req.session!.views = (req.session!.views || 0) + 1
+
+      // // Write response
+      // res.end(req.session!.views + ' views')
+
+      // res.cookie("x-auth-token", 'juaaaaan', {
+      //   httpOnly: true,
+      //   expires: new Date(Date.now() + 900000),
+      //   sameSite: "strict",
+      //   secure: true,
+      //   // priority:"high"
+      // });
       // res.send('Hola CORS de mierda')
-      // res.header('Access-Control-Allow-Origin', '*');
-      // res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-      // res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-      // // res.setHeader('Access-Control-Allow-Credentials', 'true'); // If needed
-      // res.send('cors problem fixed:)');
-      // const indexPath = path.join( __dirname + `../../../${ this.publicPath }/index.html` );
-      // res.sendFile(indexPath);
     });
     
 

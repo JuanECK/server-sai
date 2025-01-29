@@ -34,6 +34,7 @@ export class AutenticacionControlador {
         .catch( error => this.manejadorErrores( error, res ) )
     }
     
+    //baja de url
     accesoUsuario = ( req:Request, res:Response ) => {
         console.log(req.body)
         
@@ -56,6 +57,58 @@ export class AutenticacionControlador {
         // res.status(400).json('no')
     }
 
+    coockie = async ( req:Request, res:Response ) => {
+
+            const respCoockie = req.headers.cookie
+
+            const coockie = respCoockie?.split("; ").filter(c=>/^auth_access_token.+/.test(c))
+            // const coockie = respCoockie?.split("; ").filter(c=>/^x-auth-token.+/.test(c))
+            .map(e=>e.split("="));
+        if( respCoockie === undefined || coockie?.length === 0 ) return res.status(401).json({Response:'No autorizado'}) 
+            
+            // console.log({respuesta:coockie?.length})
+
+            const cookie = coockie?.at(0)
+            // console.log(cookie![1])
+            this.autentucacionServicio.coockie( cookie![1] )
+            .then( ( user ) => res.json( user ) )
+            .catch( error => this.manejadorErrores( error, res ) )
+
+    }
+
+    iniciarSession = async ( req:Request, res:Response ) =>{
+
+        const[ error, loginUserDto ] = LoginUsusarioDto.crear( req.body );
+        if( error ) return res.status( 404 ).json( { error } )
+            
+            this.autentucacionServicio.iniciarSession(loginUserDto!)
+            .then( ( usuario ) => 
+                {
+                    const {token, ...user} = usuario
+                    res.cookie("auth_access_token", token, {
+                    httpOnly: true,
+                    //   expires: new Date(Date.now() + 900000),
+                    sameSite: "strict",
+                    secure: true,
+                    //   priority:"high"
+                    }),
+
+                res.status(200).json( user )
+            } 
+        
+        )
+        .catch( error => this.manejadorErrores( error, res ))
+
+    }
+
+    terminarSession = async ( req:Request, res:Response ) =>{
+
+        res.cookie("auth_access_token", 'expirado',{
+              expires: new Date(0),
+            }),
+        res.json({logOut:true})
+    }
+
     getUsuarios = async ( req:Request, res:Response ) => {
         // const usuarios = await UsuarioModelo.findAll()
         const usuarios = await db.query('SELECT * FROM Usuario') ;
@@ -63,4 +116,5 @@ export class AutenticacionControlador {
         res.json(data)
 
     }
+
 }
