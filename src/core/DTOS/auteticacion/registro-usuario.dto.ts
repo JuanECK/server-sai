@@ -15,13 +15,11 @@ export class RegistroUsusarioDto {
         public Contrasenia:string,
         public Estatus:string,
         public Clave_Usuario:string,
-        public createAt:string,
-        public updateAt:null,
     ){}
 
     static crear( objeto: { [key:string]:any } ):[string?, RegistroUsusarioDto?]{
         // const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario, createAt, } = objeto;
-        const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario, createAt = new Date().toLocaleString(), updateAt = null } = objeto;
+        const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario, } = objeto;
 
         if( !Nombre_Completo ) return ['Falta el Nombre'];
         if( !Area ) return ['Falta el Area'];
@@ -41,8 +39,6 @@ export class RegistroUsusarioDto {
             Contrasenia,
             Estatus,
             Clave_Usuario,
-            createAt,
-            updateAt,
          )];
     }
 }

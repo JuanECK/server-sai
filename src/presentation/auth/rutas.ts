@@ -2,6 +2,7 @@ import { Router } from "express";
 import { AutenticacionControlador } from "./controlador";
 import { AutenticacionServicio } from "../services/autenticacion.service";
 import cookieParser from "cookie-parser";
+import {db}  from "../../data/mysql/db/coneccion";
 
 
 export class AutenticacionRutas {
@@ -27,9 +28,9 @@ export class AutenticacionRutas {
 
         router.post('/cookie', controlador.coockie);
 
-        router.post('/session', controlador.iniciarSession);
+        // router.post('/session', controlador.iniciarSession);
 
-        router.get('/logOut', controlador.terminarSession);
+        router.post('/logOut', controlador.terminarSession);
 
         // router.post('/cookie', function(req, res){
             // const resp = req.headers.cookie
@@ -51,9 +52,25 @@ export class AutenticacionRutas {
 
         // });
 
-        router.post('/validaSession', controlador.sessionUsuario);
+        // router.post('/validaSession', controlador.sessionUsuario);
+        
+        // -------------------------------------------------------------------
+        // ----------------------------  DEV-OPTIONS  ------------------------
+        // -------------------------------------------------------------------
         router.post('/registro',controlador.registroUsuario);
         router.get('/usuario',controlador.getUsuarios);
+        router.post('/modulo', async (req, res)=>{
+            const { id } = req.body
+            console.log(id)
+                    const sql = 'exec  sp_modulos_gral :id';
+                    const usuario = await db.query( sql, { replacements: { id:id} } );            
+                    const resultado = JSON.parse(JSON.stringify(usuario))
+                    // console.log(resultado)
+
+                    res.json(resultado)
+
+        });
+
 
     
         return router

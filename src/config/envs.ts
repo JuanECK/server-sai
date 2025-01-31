@@ -16,6 +16,12 @@ export const envs = {
   MSQL_PASSWORD: get('MSQL_PASSWORD').required().asString(),
   MSQL_DATABASE: get('MSQL_DATABASE').required().asString(),
 
+  
+  SQL_SER_HOST: get('SQL_SER_HOST').required().asString(),
+  SQL_SER_USER: get('SQL_SER_USER').required().asString(),
+  SQL_SER_PASSWORD: get('SQL_SER_PASSWORD').required().asString(),
+  SQL_SER_DATABASE: get('SQL_SER_DATABASE').required().asString(),
+
 
 }
 

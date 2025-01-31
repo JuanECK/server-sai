@@ -1,9 +1,9 @@
 import { bcryptAdapter, cryptoAdapter } from "../../config";
 import { JwtAdapter } from "../../config/jwt.adapter";
-import { GeneraError, LoginUsusarioDto, UsuarioEntidad } from "../../core";
+import { GeneraError, LoginUsusarioDto, UsuarioEntidad, LogOutUsusarioDto } from "../../core";
 import { RegistroUsusarioDto } from "../../core/DTOS/auteticacion/registro-usuario.dto";
 import {db}  from "../../data/mysql/db/coneccion";
-import   UsuarioModelo   from "../../data/mysql/model/usuario.model";
+// import   UsuarioModelo   from "../../data/mysql/model/usuario.model";
 
 //------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
@@ -28,9 +28,10 @@ export class AutenticacionServicio {
                 
             registroUsuarioDto.Clave_Usuario = cryptoAdapter.secreto( registroUsuarioDto.Clave_Usuario )
                 
-            const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario, createAt, updateAt } =  registroUsuarioDto;
+            const { Nombre_Completo, Area, Id_Perfil, Usuario, Contrasenia, Estatus, Clave_Usuario } =  registroUsuarioDto;
     
-            const sql = 'CALL sp_inserta_usuario( :Nombre_Completo, :Area, :Id_Perfil, :Usuario, :Contrasenia, :Estatus, :Clave_Usuario, :createAt, :updateAt )';
+            const sql = 'exec sp_inserta_usuario :Nombre_Completo, :Area, :Id_Perfil, :Usuario, :Contrasenia, :Estatus, :Clave_Usuario ';
+            // const sql = 'CALL sp_inserta_usuario( :Nombre_Completo, :Area, :Id_Perfil, :Usuario, :Contrasenia, :Estatus, :Clave_Usuario, :createAt, :updateAt )';
             const usuario = await db.query( sql, { replacements: {
                 Nombre_Completo,
                 Area:Area,
@@ -39,13 +40,12 @@ export class AutenticacionServicio {
                 Contrasenia:Contrasenia,
                 Estatus:Estatus,
                 Clave_Usuario:Clave_Usuario,
-                createAt:createAt,
-                updateAt:updateAt,
             } } );
-            const resultado = JSON.parse( JSON.stringify( usuario ) )
-            const data = resultado[0]
 
-            if( data.result === 0 ) throw GeneraError.badRespuesta( 'El usuario ya existe' );
+            // console.log(usuario[0][0])
+
+            const resultado = JSON.parse( JSON.stringify( usuario[0][0] ) )
+            if( resultado.Respuesta === 'si' ) throw GeneraError.noEncontrado( 'El usuario ya existe' );
 
             return {message: 'Usuario creado con exito'};
 
@@ -61,43 +61,42 @@ export class AutenticacionServicio {
 
         } catch (error) {
             console.log( error )
-            throw GeneraError.badRespuesta( ` ${error} ` )
+            throw GeneraError.noEncontrado( ` ${error} ` )
         }
     }
 
+    // public async accesoUsuario( loginUsusarioDto:LoginUsusarioDto ){
 
-    public async accesoUsuario( loginUsusarioDto:LoginUsusarioDto ){
-
-        const{ Usuario } = loginUsusarioDto
+    //     const{ Usuario } = loginUsusarioDto
         
-        //consulta usando mysql2
-        // const usuario = await UsuarioModelo.findOne( { where: { Usuario } } )
+    //     //consulta usando mysql2
+    //     // const usuario = await UsuarioModelo.findOne( { where: { Usuario } } )
     
-        // consulta usando procedimientos establecidos en MySQL
-        const sql = 'CALL sp_valida_usuario(:Usuario)';
-        const usuario = await db.query( sql, { replacements: { Usuario:Usuario } } );
+    //     // consulta usando procedimientos establecidos en MySQL
+    //     const sql = 'exec sp_valida_usuario :Usuario';
+    //     const usuario = await db.query( sql, { replacements: { Usuario:Usuario } } );
         
-        const resultado = JSON.parse(JSON.stringify(usuario))
-        const data = resultado[0]
+    //     const resultado = JSON.parse(JSON.stringify(usuario))
+    //     const data = resultado[0]
 
-        if( !data ) throw GeneraError.badRespuesta( 'El E-mail no existe' );
+    //     if( !data ) throw GeneraError.badRespuesta( 'El E-mail no existe' );
 
-        const isMaching = bcryptAdapter.compare( loginUsusarioDto.Contrasenia, data.Contrasenia );
-        if( !isMaching ) throw GeneraError.badRespuesta( 'El password es incorrecto' );
+    //     const isMaching = bcryptAdapter.compare( loginUsusarioDto.Contrasenia, data.Contrasenia );
+    //     if( !isMaching ) throw GeneraError.badRespuesta( 'El password es incorrecto' );
 
-        const { Contrasenia, ...usuarioEntidad } = UsuarioEntidad.formularioObjeto( data );
+    //     const { Contrasenia, ...usuarioEntidad } = UsuarioEntidad.formularioObjeto( data );
 
-        const token = await JwtAdapter.generateToken({ Id:data.Id_User, usuario: resultado.Nombre_Completo, sesion: data.Clave_Usuario });
-        if ( !token ) throw GeneraError.servidorInterno( 'Error while creating JWT' );
+    //     const token = await JwtAdapter.generateToken({ Id:data.Id_User, usuario: resultado.Nombre_Completo, sesion: data.Clave_Usuario });
+    //     if ( !token ) throw GeneraError.servidorInterno( 'Error while creating JWT' );
 
-        return {
+    //     return {
 
-        user: usuarioEntidad,
-        token
+    //     user: usuarioEntidad,
+    //     token
 
-        }
+    //     }
 
-    }   
+    // }   
 
     public async sessionUsuario ( Token:string ){
         // console.log(Token)
@@ -121,36 +120,57 @@ export class AutenticacionServicio {
 
     public async iniciarSession ( loginUsusarioDto:LoginUsusarioDto ) {
 
+        // console.log(loginUsusarioDto)
 
-        const{ Usuario } = loginUsusarioDto
+        const{ Usuario, } = loginUsusarioDto
         
         //consulta usando mysql2
         // const usuario = await UsuarioModelo.findOne( { where: { Usuario } } )
     
         // consulta usando procedimientos establecidos en MySQL
-        const sql = 'CALL sp_valida_usuario(:Usuario)';
+
+        const sql = 'exec sp_valida_usuario :Usuario';
+        // const sql = 'CALL sp_valida_usuario(:Usuario)';
         const usuario = await db.query( sql, { replacements: { Usuario:Usuario } } );
+        if( usuario[0].length === 0 ) throw GeneraError.badRespuesta( 'El E-mail no existe' );
+
+        const resultado = JSON.parse(JSON.stringify(usuario[0][0]))
+
+        // console.log(resultado)
+        // const data = resultado[0]
+        // if( !data ) throw GeneraError.badRespuesta( 'El E-mail no existe' );
+
+        // const bitacora = JSON.parse(JSON.stringify(usuario[0][0]))
+        // console.log(bitacora.Id_User)
+
         
-        const resultado = JSON.parse(JSON.stringify(usuario))
-        const data = resultado[0]
-
-        if( !data ) throw GeneraError.badRespuesta( 'El E-mail no existe' );
-
-        const isMaching = bcryptAdapter.compare( loginUsusarioDto.Contrasenia, data.Contrasenia );
+        // const result = JSON.parse(JSON.stringify(inserBitacora))
+        // console.log({inserto:inserBitacora})
+        
+        
+        const isMaching = bcryptAdapter.compare( loginUsusarioDto.Contrasenia, resultado.Contrasenia );
         if( !isMaching ) throw GeneraError.badRespuesta( 'El password es incorrecto' );
+        
+        const { Contrasenia, ...usuarioEntidad } = UsuarioEntidad.formularioObjeto( resultado );
+        
+        const token = await JwtAdapter.generateToken({ Id:resultado.Id_User, usuario: resultado.Nombre_Completo, sesion: resultado.Clave_Usuario });
+        if ( !token ) throw GeneraError.servidorInterno( 'Error al crear JWT' );
+        
 
-        const { Contrasenia, ...usuarioEntidad } = UsuarioEntidad.formularioObjeto( data );
+        const sqlLogBitacora = `exec sp_inserta_inicio_sesion :Id_User,"inicio sesion"` //
+        //metodo de MySql
+        // const sqlLogBitacora = `CALL sp_inserta_inicio_sesion(${bitacora[0].Id_User},"inicio sesion")`
+        const inserBitacora = await db.query( sqlLogBitacora, {replacements:{ Id_User:resultado.Id_User }} );
+        if(inserBitacora.length !== 2 )  throw GeneraError.badRespuesta('error al iniciar session')
 
-        const token = await JwtAdapter.generateToken({ Id:data.Id_User, usuario: resultado.Nombre_Completo, sesion: data.Clave_Usuario });
-        if ( !token ) throw GeneraError.servidorInterno( 'Error while creating JWT' );
-
+        console.log(inserBitacora.length)
+        
         return {
 
         user: usuarioEntidad,
         token
 
         }
-
 
         // return
 
@@ -165,5 +185,21 @@ export class AutenticacionServicio {
         //     return res
         //     .status(200)
         //     .json({user: 'Juan', loged: true})  
+    }
+
+    public async terminarSession ( loginUserDto:LogOutUsusarioDto ){
+
+            const { id_user } = loginUserDto;
+    
+            const sqlLogBitacora = `exec sp_inserta_inicio_sesion :Id_User,"Sesion Terminada"`;
+            const inserBitacora = await db.query( sqlLogBitacora, { replacements:{ Id_User:id_user } })
+    
+            // console.log(inserBitacora)
+            if(inserBitacora.length !== 2 )  throw GeneraError.badRespuesta('error al terminar session')
+                
+            return {
+                sessionOut:true
+            }
+            
     }
 }

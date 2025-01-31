@@ -24,13 +24,13 @@ import  { createConnection, createPool }  from 'mysql2/promise';
 
 
     export const db  = new Sequelize(
-        envs.MSQL_DATABASE, 
-        envs.MSQL_USER,
-        envs.MSQL_PASSWORD,
+        envs.SQL_SER_DATABASE, 
+        envs.SQL_SER_USER,
+        envs.SQL_SER_PASSWORD,
         
             {
-            host: envs.MSQL_HOST,
-            dialect:'mysql',
+            host: envs.SQL_SER_HOST,
+            dialect:'mssql',
             // logging:false
             define: {
                 timestamps: false
@@ -38,6 +38,21 @@ import  { createConnection, createPool }  from 'mysql2/promise';
             }
             
     )
+    // export const db  = new Sequelize(
+    //     envs.MSQL_DATABASE, 
+    //     envs.MSQL_USER,
+    //     envs.MSQL_PASSWORD,
+        
+    //         {
+    //         host: envs.MSQL_HOST,
+    //         dialect:'mysql',
+    //         // logging:false
+    //         define: {
+    //             timestamps: false
+    //         },
+    //         }
+            
+    // )
     
 
         
