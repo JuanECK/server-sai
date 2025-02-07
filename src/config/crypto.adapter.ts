@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { envs } from './envs';
 
+// const SEED = 'padroPantera'
 const SEED = envs.JWT_SEED
 
 export const cryptoAdapter = {
@@ -13,12 +14,16 @@ export const cryptoAdapter = {
     },
 
     muestraSecreto: ( secreto:string ) => {
-            
-        const bytes = CryptoJS.AES.decrypt(secreto, SEED);
-        const secretoDesbloqueado = bytes.toString(CryptoJS.enc.Utf8);
-        return secretoDesbloqueado;
+        try {
+            const bytes = CryptoJS.AES.decrypt(secreto, SEED);
+            const secretoDesbloqueado = bytes.toString(CryptoJS.enc.Utf8);
+            return secretoDesbloqueado;
+        } catch (error) {
+            throw new Error ('error')
+        }
 
     }
+
 
 }
 

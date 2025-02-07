@@ -155,7 +155,10 @@ export class AutenticacionServicio {
         
         const token = await JwtAdapter.generateToken({ Id:resultado.Id_User, usuario: resultado.Nombre_Completo, sesion: resultado.Clave_Usuario });
         if ( !token ) throw GeneraError.servidorInterno( 'Error al crear JWT' );
-        
+
+        const llave = JSON.stringify({id_Perfil:resultado.Id_Perfil, Id:resultado.Id_User}) 
+        const UserId = cryptoAdapter.secreto(llave)
+        usuarioEntidad.Datos = UserId
 
         const sqlLogBitacora = `exec sp_inserta_inicio_sesion :Id_User,"inicio sesion"` //
         //metodo de MySql
@@ -164,10 +167,12 @@ export class AutenticacionServicio {
         if(inserBitacora.length !== 2 )  throw GeneraError.badRespuesta('error al iniciar session')
 
         console.log(inserBitacora.length)
-        
+        const { Id_Perfil, Id_User, Clave_Usuario, ...usuarioData } = usuarioEntidad
+
         return {
 
-        user: usuarioEntidad,
+        user: usuarioData,
+        // UserId:UserId,
         token
 
         }

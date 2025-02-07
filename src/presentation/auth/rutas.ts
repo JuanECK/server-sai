@@ -3,6 +3,7 @@ import { AutenticacionControlador } from "./controlador";
 import { AutenticacionServicio } from "../services/autenticacion.service";
 import cookieParser from "cookie-parser";
 import {db}  from "../../data/mysql/db/coneccion";
+import { cryptoAdapter } from "../../config";
 
 
 export class AutenticacionRutas {
@@ -61,17 +62,24 @@ export class AutenticacionRutas {
         router.get('/usuario',controlador.getUsuarios);
         router.post('/modulo', async (req, res)=>{
             const { id } = req.body
-            console.log(id)
-                    const sql = 'exec  sp_modulos_gral :id';
-                    const usuario = await db.query( sql, { replacements: { id:id} } );            
-                    const resultado = JSON.parse(JSON.stringify(usuario))
-                    // console.log(resultado)
 
-                    res.json(resultado)
+            try {
+                
+                const data = JSON.parse(cryptoAdapter.muestraSecreto(id))
+                console.log(data)
+                console.log(data.id_Perfil)
+                
+                const sql = 'exec  sp_modulos_gral :id';
+                const usuario = await db.query( sql, { replacements: { id:data.id_Perfil} } );            
+                const resultado = JSON.parse(JSON.stringify(usuario))
+    
+                res.json(resultado)
+
+            } catch (error) {
+                res.json(['error'])
+            }
 
         });
-
-
     
         return router
     }

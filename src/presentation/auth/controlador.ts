@@ -4,6 +4,7 @@ import { RegistroUsusarioDto } from "../../core/DTOS/auteticacion/registro-usuar
 import { AutenticacionServicio } from "../services/autenticacion.service";
 import   UsuarioModelo   from "../../data/mysql/model/usuario.model";
 import { db } from "../../data/mysql/db/coneccion";
+import { cryptoAdapter } from "../../config";
 
 export class AutenticacionControlador {
 
@@ -60,7 +61,9 @@ export class AutenticacionControlador {
         this.autentucacionServicio.iniciarSession(loginUserDto!)
         .then( ( usuario ) => 
             {
+                console.log(usuario)
                 const {token, ...user} = usuario
+
                 res.cookie("auth_access_token", token, {
                 httpOnly: true,
                 //   expires: new Date(Date.now() + 900000),
@@ -79,7 +82,11 @@ export class AutenticacionControlador {
 
     terminarSession = async ( req:Request, res:Response ) =>{
 
-        const [ error, loginUserDto ] = LogOutUsusarioDto.crear(req.body)
+        const idUser = this.parseCriptoID(req.body.id_user)
+
+        console.log(typeof idUser.Id)
+
+        const [ error, loginUserDto ] = LogOutUsusarioDto.crear(idUser.Id)
         if( error ) return res.status(403).json('Falta id Usuario')
 
         this.autentucacionServicio.terminarSession( loginUserDto! )
@@ -101,6 +108,20 @@ export class AutenticacionControlador {
         const data = usuarios[0]
         res.json(data)
 
+    }
+
+
+    parseCriptoID (id:string){
+        try {
+                
+            const data = JSON.parse(cryptoAdapter.muestraSecreto(id))
+            console.log(data)
+            console.log(data.id_Perfil)
+            return data
+
+        } catch (error) {
+            
+        }
     }
 
 }
