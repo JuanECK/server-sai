@@ -84,12 +84,13 @@ export class AutenticacionControlador {
 
         const idUser = this.parseCriptoID(req.body.id_user)
 
-        console.log(typeof idUser.Id)
+        console.log(idUser.Id)
+        
+        // const [ error, loginUserDto ] = LogOutUsusarioDto.crear(idUser.Id)
+        // console.log({usuario:loginUserDto})
+        if( !idUser.Id ) return res.status(403).json('Falta id Usuario')
 
-        const [ error, loginUserDto ] = LogOutUsusarioDto.crear(idUser.Id)
-        if( error ) return res.status(403).json('Falta id Usuario')
-
-        this.autentucacionServicio.terminarSession( loginUserDto! )
+        this.autentucacionServicio.terminarSession( idUser.Id )
         .then( ( usuario )=>{
 
             res.cookie("auth_access_token", 'expirado',{
@@ -98,7 +99,6 @@ export class AutenticacionControlador {
             res.json({logOut:true})
         } )
         .catch( error => this.manejadorErrores( error, res ) )
-
 
     }
 

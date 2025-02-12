@@ -192,9 +192,10 @@ export class AutenticacionServicio {
         //     .json({user: 'Juan', loged: true})  
     }
 
-    public async terminarSession ( loginUserDto:LogOutUsusarioDto ){
+    public async terminarSession ( id_user:string ){
+    // public async terminarSession ( loginUserDto:LogOutUsusarioDto ){
 
-            const { id_user } = loginUserDto;
+            // const { id_user } = loginUserDto;
     
             const sqlLogBitacora = `exec sp_inserta_inicio_sesion :Id_User,"Sesion Terminada"`;
             const inserBitacora = await db.query( sqlLogBitacora, { replacements:{ Id_User:id_user } })

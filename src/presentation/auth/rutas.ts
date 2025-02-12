@@ -60,14 +60,15 @@ export class AutenticacionRutas {
         // -------------------------------------------------------------------
         router.post('/registro',controlador.registroUsuario);
         router.get('/usuario',controlador.getUsuarios);
+
         router.post('/modulo', async (req, res)=>{
             const { id } = req.body
 
             try {
                 
                 const data = JSON.parse(cryptoAdapter.muestraSecreto(id))
-                console.log(data)
-                console.log(data.id_Perfil)
+                // console.log(data)
+                // console.log(data.id_Perfil)
                 
                 const sql = 'exec  sp_modulos_gral :id';
                 const usuario = await db.query( sql, { replacements: { id:data.id_Perfil} } );            
@@ -76,11 +77,23 @@ export class AutenticacionRutas {
                 res.json(resultado)
 
             } catch (error) {
-                res.json(['error'])
+                res.json(['Esro es un error'])
             }
 
         });
+
+        router.post('/getModuloId' ,async (req, res) =>{
+            const { id_user } = req.body
+            try {
+                const data = JSON.parse(cryptoAdapter.muestraSecreto(id_user))
+                res.json(data.id_Perfil)
+
+            } catch (error) {
+                res.json(['error'])
+            }
+        })
     
+
         return router
     }
 }
