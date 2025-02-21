@@ -81,14 +81,14 @@ export class AutenticacionControlador {
     }
 
     terminarSession = async ( req:Request, res:Response ) =>{
+        // console.log(req)
 
         const idUser = this.parseCriptoID(req.body.id_user)
 
         console.log(idUser.Id)
         
-        // const [ error, loginUserDto ] = LogOutUsusarioDto.crear(idUser.Id)
-        // console.log({usuario:loginUserDto})
-        if( !idUser.Id ) return res.status(403).json('Falta id Usuario')
+        // if( !idUser.Id ) return res.status(403).json('Falta id Usuario')
+        if( !idUser.Id ) { idUser.Id = 15 }
 
         this.autentucacionServicio.terminarSession( idUser.Id )
         .then( ( usuario )=>{
@@ -110,6 +110,24 @@ export class AutenticacionControlador {
 
     }
 
+    GetModuloPerfil = async ( req:Request, res:Response ) => {
+        const { id } = req.body
+
+        this.autentucacionServicio.GetModuloPerfil( id )
+        .then( ( result ) => {res.json( result )} )
+        .catch( error => this.manejadorErrores( error, res ) )
+        
+    }
+    
+    GetModuloId = async ( req:Request, res:Response ) => {
+        const { id_user } = req.body
+
+        this.autentucacionServicio.GetModuloId( id_user )
+        .then( ( result ) => { res.json( result.Data.id_Perfil )} )
+        .catch( error => this.manejadorErrores( error, res ) )
+
+    }
+
 
     parseCriptoID (id:string){
         try {
@@ -120,7 +138,7 @@ export class AutenticacionControlador {
             return data
 
         } catch (error) {
-            
+            return []
         }
     }
 

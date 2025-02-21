@@ -13,25 +13,18 @@ export class AutenticacionRutas {
         const router = Router();
         router.use(cookieParser())
 
-        // const cookies = {
-        //     expires: new Date(Date.now().valueOf()),
-        //     httpOnly: true
-        //   }
-
         const autenticacionServicio = new AutenticacionServicio()
         const controlador = new AutenticacionControlador( autenticacionServicio );
-
-        // router.post('/login', (req, res)=>{
-        //     res.cookie('cookie', 'usuario.token',{path:'/', })
-        // });
 
         router.post('/login', controlador.iniciarSession);
 
         router.post('/cookie', controlador.coockie);
 
-        // router.post('/session', controlador.iniciarSession);
-
         router.post('/logOut', controlador.terminarSession);
+
+        router.post('/modulo', controlador.GetModuloPerfil);
+        router.post('/getModuloId', controlador.GetModuloId);
+
 
         // router.post('/cookie', function(req, res){
             // const resp = req.headers.cookie
@@ -58,40 +51,11 @@ export class AutenticacionRutas {
         // -------------------------------------------------------------------
         // ----------------------------  DEV-OPTIONS  ------------------------
         // -------------------------------------------------------------------
+
+
         router.post('/registro',controlador.registroUsuario);
         router.get('/usuario',controlador.getUsuarios);
 
-        router.post('/modulo', async (req, res)=>{
-            const { id } = req.body
-
-            try {
-                
-                const data = JSON.parse(cryptoAdapter.muestraSecreto(id))
-                // console.log(data)
-                // console.log(data.id_Perfil)
-                
-                const sql = 'exec  sp_modulos_gral :id';
-                const usuario = await db.query( sql, { replacements: { id:data.id_Perfil} } );            
-                const resultado = JSON.parse(JSON.stringify(usuario))
-    
-                res.json(resultado)
-
-            } catch (error) {
-                res.json(['Esro es un error'])
-            }
-
-        });
-
-        router.post('/getModuloId' ,async (req, res) =>{
-            const { id_user } = req.body
-            try {
-                const data = JSON.parse(cryptoAdapter.muestraSecreto(id_user))
-                res.json(data.id_Perfil)
-
-            } catch (error) {
-                res.json(['error'])
-            }
-        })
     
 
         return router

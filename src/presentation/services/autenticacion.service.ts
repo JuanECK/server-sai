@@ -64,39 +64,7 @@ export class AutenticacionServicio {
             throw GeneraError.noEncontrado( ` ${error} ` )
         }
     }
-
-    // public async accesoUsuario( loginUsusarioDto:LoginUsusarioDto ){
-
-    //     const{ Usuario } = loginUsusarioDto
-        
-    //     //consulta usando mysql2
-    //     // const usuario = await UsuarioModelo.findOne( { where: { Usuario } } )
-    
-    //     // consulta usando procedimientos establecidos en MySQL
-    //     const sql = 'exec sp_valida_usuario :Usuario';
-    //     const usuario = await db.query( sql, { replacements: { Usuario:Usuario } } );
-        
-    //     const resultado = JSON.parse(JSON.stringify(usuario))
-    //     const data = resultado[0]
-
-    //     if( !data ) throw GeneraError.badRespuesta( 'El E-mail no existe' );
-
-    //     const isMaching = bcryptAdapter.compare( loginUsusarioDto.Contrasenia, data.Contrasenia );
-    //     if( !isMaching ) throw GeneraError.badRespuesta( 'El password es incorrecto' );
-
-    //     const { Contrasenia, ...usuarioEntidad } = UsuarioEntidad.formularioObjeto( data );
-
-    //     const token = await JwtAdapter.generateToken({ Id:data.Id_User, usuario: resultado.Nombre_Completo, sesion: data.Clave_Usuario });
-    //     if ( !token ) throw GeneraError.servidorInterno( 'Error while creating JWT' );
-
-    //     return {
-
-    //     user: usuarioEntidad,
-    //     token
-
-    //     }
-
-    // }   
+ 
 
     public async sessionUsuario ( Token:string ){
         // console.log(Token)
@@ -111,11 +79,7 @@ export class AutenticacionServicio {
         if( !payload ) throw GeneraError.noAutorizado( 'token invalido' );
 
         return {respuesta:true}
-        // console.log({esta:coockie})
-        
-        // return {
-        //     user: 'Juan', loged: true
-        // }
+
     }
 
     public async iniciarSession ( loginUsusarioDto:LoginUsusarioDto ) {
@@ -196,16 +160,41 @@ export class AutenticacionServicio {
     // public async terminarSession ( loginUserDto:LogOutUsusarioDto ){
 
             // const { id_user } = loginUserDto;
-    
-            const sqlLogBitacora = `exec sp_inserta_inicio_sesion :Id_User,"Sesion Terminada"`;
+            let sqlLogBitacora = ''
+            if(+id_user == 15){
+                sqlLogBitacora = `exec sp_inserta_inicio_sesion :Id_User,"Token Manipulado"`;
+            }else{
+                sqlLogBitacora = `exec sp_inserta_inicio_sesion :Id_User,"Sesion Terminada"`;
+            }
+            console.log(id_user)
             const inserBitacora = await db.query( sqlLogBitacora, { replacements:{ Id_User:id_user } })
-    
-            // console.log(inserBitacora)
+            console.log(inserBitacora)
             if(inserBitacora.length !== 2 )  throw GeneraError.badRespuesta('error al terminar session')
                 
             return {
                 sessionOut:true
             }
             
+    }
+
+    public async GetModuloPerfil ( id:string ) {
+        const data = JSON.parse(cryptoAdapter.muestraSecreto(id))
+        if(!data) throw GeneraError.noAutorizado('ID incorrecto')
+               
+        const sql = 'exec  sp_modulos_gral :id';
+        const usuario = await db.query( sql, { replacements: { id:data.id_Perfil} } ); 
+        // console.log(usuario)           
+        const resultado = JSON.parse(JSON.stringify(usuario))
+
+        return resultado
+
+    }
+    public async GetModuloId ( id_user:string ) {
+
+        const data = JSON.parse(cryptoAdapter.muestraSecreto(id_user))
+        if( !data ) throw GeneraError.noAutorizado('ID incorrecto')
+
+        return { Data:data}
+
     }
 }

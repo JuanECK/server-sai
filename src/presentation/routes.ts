@@ -2,6 +2,7 @@
 
 import { Router } from 'express';
 import { AutenticacionRutas } from './auth/rutas';
+import { InicioRutas } from './inicio/rutas.inicio';
 // import cors from 'cors';
 
 
@@ -13,7 +14,8 @@ export class AppRoutes {
     const router = Router();
 
     // Definir las rutas
-    router.use('/', AutenticacionRutas.routes );
+    router.use('/auth', AutenticacionRutas.routes );
+    router.use('/inicio', InicioRutas.routes);
 
 
 
