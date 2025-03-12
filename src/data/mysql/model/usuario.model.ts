@@ -58,7 +58,7 @@ UsuarioModelo.init(
             allowNull:true,
         },
     },
-    // // parametros de donfiguracion
+    // // parametros de configuracion
     {
         sequelize:db,
         timestamps: false,

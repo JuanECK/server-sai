@@ -1,94 +1,78 @@
+// -------------------------------------------------------
+// -------------------------------------------------------
+// Nombre: server.ts
+// Autor: Juan Guadalupe Gonzalez Soto
+// Fecha: 21/Febrero/2025
+// Descripcion: Archivo de configuracion del servidor
+// Modiciaciones: 
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+//---- Dependencias de la server.ts
 import express, { Router } from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session'
 import cors from 'cors';
 
+//---- Interfaz del servidor
 interface Options {
   port: number;
   routes: Router;
   public_path?: string;
 }
 
-
+//---- clase del servidor
 export class Server {
 
-  // public app = express();
+  //---- Propiedades de la clase
   public readonly app = express();
   private serverListener?: any;
   private readonly port: number;
-  private readonly publicPath: string;
   private readonly routes: Router;
 
+
   constructor(options: Options) {
-    const { port, routes, public_path = 'public' } = options;
+    const { port, routes } = options;
     this.port = port;
-    this.publicPath = public_path;
     this.routes = routes;
   }
 
   async start() {
 
-    
+    //---- Configuracion del uso de cors
     const corsOptions = {
-      origin: 'http://localhost:4200',
-      credentials:true,  
-      optionsSuccessStatus: 200 // For legacy browser support
+      origin: 'http://localhost:4200', // origen de la aplicacion
+      credentials:true,  // credenciales en la cabecera
+      optionsSuccessStatus: 200 // status de la respuesta
   }
 
-  this.app.use(cors(corsOptions));
-  this.app.use(cookieParser())
+  //---- Configuracion de cors
+  this.app.use(cors(corsOptions)); // para que se pueda acceder a la api desde el origen pactado con sus credenciales y opciones
 
-  // this.app.use(
-  //   cors({
-  //       origin: "http://localhost:3000",
-  //       credentials: true
-  //   })
-  // );
- 
-  // this.app.use(cookieSession({
-  //   name: 'session',
-  //   keys: ['key1', 'key2']
-  // }))
+  //---- Configuracion de las cookies
+  this.app.use(cookieParser()) // usar cookies
 
+  //---- Configuracion de los tipos de datos que acepta el servidor 
     this.app.use( express.json() ); // raw
     this.app.use( express.urlencoded({ extended: true }) ); // x-www-form-urlencoded
-    // this.app.use(cookieParser())
-
-    //* Public Folder
-    this.app.use( express.static( this.publicPath ) );
 
     //* Routes
-    this.app.use( this.routes );
-    this.app.disable('x-powered-by')
+    this.app.use( this.routes ); // usar las ruras de la aplicacion
+    this.app.disable('x-powered-by') // desactivar el mensaje de express en la cabecera
     
 
-    //* SPA /^\/(?!api).*/  <== Únicamente si no empieza con la palabra api
-    // this.app.get('*', (req, res, next) => {
-    this.app.get('/', (req, res) => {
-      // res.header("Access-Control-Allow-Origin", "http://localhost:3000/");
-      // req.session!.views = (req.session!.views || 0) + 1
-
-      // // Write response
-      // res.end(req.session!.views + ' views')
-
-      // res.cookie("x-auth-token", 'juaaaaan', {
-      //   httpOnly: true,
-      //   expires: new Date(Date.now() + 900000),
-      //   sameSite: "strict",
-      //   secure: true,
-      //   // priority:"high"
-      // });
-      // res.send('Hola CORS de mierda')
-    });
+    // this.app.get('/', (req, res) => {
+    // });
     
-
+    //---- Iniciar el servidor con las rutas y configuraciones
     this.serverListener = this.app.listen(this.port, () => {
-      console.log(`Server running on port ${ this.port }`);
+      console.log(`Servidor corriendo en el puerto ${ this.port }`);// mensaje de servidor corriendo
     });
 
   }
 
+  //---- Funcion para cerrar el servidor
   public close() {
     this.serverListener?.close();
   }

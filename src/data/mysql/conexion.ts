@@ -1,5 +1,14 @@
+// -------------------------------------------------------
+// -------------------------------------------------------
+// Nombre: conexion.ts
+// Autor: Juan Guadalupe Gonzalez Soto
+// Fecha: 21/Febrero/2025
+// Descripcion: Archivo  de conexion a la base de datos
+// Modiciaciones: 
+// -------------------------------------------------------
+// -------------------------------------------------------
 
-import { config } from 'dotenv';
+//---- Dependencias de la conexion.ts
 import { Sequelize } from 'sequelize';
 import  mssql  from 'mssql'
 import { envs } from '../../config/envs';

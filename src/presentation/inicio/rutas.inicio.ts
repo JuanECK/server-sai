@@ -14,7 +14,7 @@ export class InicioRutas {
         const controlador = new InicioControlador( dashboardServicio )
 
         router.get('/dashboard', controlador.dashboard)
-        router.get('/saldoInicial', controlador.setSaldoInicial)
+        router.post('/saldoInicial', controlador.setSaldoInicial)
 
         // router.get('/dashboard', async function( req, res ){
             

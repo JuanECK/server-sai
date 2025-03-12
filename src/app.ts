@@ -1,9 +1,19 @@
+// -------------------------------------------------------
+// -------------------------------------------------------
+// Nombre: app.ts
+// Autor: Juan Guadalupe Gonzalez Soto
+// Fecha: 21/Febrero/2025
+// Descripcion: Archivo principal de la aplicacion
+// Modiciaciones: 
+// -------------------------------------------------------
+// -------------------------------------------------------
+
+
+//---- Dependencias de la app.ts
 import { envs } from './config/envs';
-import { MongoDatabase, MySqlConnect, getConnect, mssql ,SqlSerConnect} from './data';
+import { SqlSerConnect } from './data/mysql/conexion';
 import { AppRoutes } from './presentation/routes';
 import { Server } from './presentation/server';
-import { Connection }  from 'tedious'
-
 
 
 (async()=> {
@@ -13,18 +23,7 @@ import { Connection }  from 'tedious'
 
 async function main() {
 
-
-
-  //Conexion a base de datos SQL Server
-  // try {
-  //   const pool = await getConnect();
-  //   const result = pool?.request().query('SELECT * from Usuario')
-  //   console.log(result)
-  // } catch (error) {
-    
-  // }
-
-  //Conexion a base de datos SQL Server
+  //----Conexion a base de datos SQL Server
   await SqlSerConnect.connect({
     host: envs.SQL_SER_HOST,
     user: envs.SQL_SER_USER,
@@ -32,8 +31,8 @@ async function main() {
     database: envs.SQL_SER_DATABASE,
   })
   
-  //Conexion a base de datos MySql 
-  // prueba: SELECT 1+1 AS result
+
+  //----Conexion a base de datos MySql 
   // await MySqlConnect.connect({
   //   host: envs.MSQL_HOST,
   //   user: envs.MSQL_USER,
@@ -41,17 +40,11 @@ async function main() {
   //   database: envs.MSQL_DATABASE,
   // })
 
-
-  // Conexion a base de datos MongoDB
-  // await MongoDatabase.connect( {
-  //   dbName: envs.MONGO_DB_NAME,
-  //   mongoUrl: envs.MONGO_URL,
-  // } )
-
+  // ---- Conexion a base de datos 
   const server = new Server({
-    port: envs.PORT,
-    routes: AppRoutes.routes,
+    port: envs.PORT, // Puerto de la aplicacion
+    routes: AppRoutes.routes, // Rutas de la aplicacion
   });
 
-  server.start();
+  server.start(); // Iniciar el servidor
 }

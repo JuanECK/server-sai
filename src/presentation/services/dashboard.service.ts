@@ -18,14 +18,16 @@ export class DashboardServicio {
             const AEA = 'sp_adeudo_Europe_abonos_dash'
             const SC = 'exec sp_saldo_cuentas_dash'
             const CDS = 'exec sp_carga_diferencia_saldos_dash'
+            const CDG = 'exec sp_carga_diferencia_global_dash'
 
             const prestamos = await db.query(PI)
             const adeudos = await db.query(AE)
             const abonos = await db.query(AEA)
             const cuentas = await db.query(SC)
             const saldos = await db.query(CDS)
+            const diferencia = await db.query(CDG)
 
-            array.push(prestamos[0],adeudos[0],abonos[0],cuentas[0],saldos[0])
+            array.push(prestamos[0],adeudos[0],abonos[0],cuentas[0],saldos[0],diferencia[0])
             // array.push([{prestamoInterno:prestamos[0]},{adeudoEurope:adeudos[0]},{saldoCuentas:cuentas[0]},{DiferenciaSaldos:saldos[0]}])
             // console.log(array)
 
@@ -42,18 +44,23 @@ export class DashboardServicio {
     public async setSaldoInicial(  saldo:string, identificador:string, usuario:string ){
 
         try {
+
+            console.log( saldo, identificador, usuario)
             
             const data = this.parseCriptoID( usuario)
-            if( !data ) throw GeneraError.noAutorizado('ID incorrecto')
+            if( !data.Id ) throw GeneraError.noAutorizado('ID incorrecto')
 
-
-            const sql = `exec sp_set_saldo_inicial ${identificador}, ${saldo}, ${data.id_Perfil}`;
+            const sql = `exec sp_actualiza_saldo_inicial ${identificador}, ${saldo}, ${data.Id}`;
             const result = await db.query(sql)
+            const { Respuesta } = JSON.parse(JSON.stringify(result[0][0])) 
+            if( Respuesta === 0 ) throw GeneraError.badRespuesta('Error al actualizar saldo inicial')
+            // console.log( result[0][0])
 
-            return result
+            return { Respuesta: 'OK'} 
 
         } catch (error) {
-            
+            console.log( error )
+            throw GeneraError.servidorInterno( 'Error inesperado' )  
         }
 
     }
