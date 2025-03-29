@@ -179,6 +179,7 @@ export class AutenticacionServicio {
 
     public async GetModuloPerfil ( id:string ) {
         const data = JSON.parse(cryptoAdapter.muestraSecreto(id))
+
         if(!data) throw GeneraError.noAutorizado('ID incorrecto')
                
         const sql = 'exec  sp_modulos_gral :id';
@@ -193,8 +194,14 @@ export class AutenticacionServicio {
 
         const data = JSON.parse(cryptoAdapter.muestraSecreto(id_user))
         if( !data ) throw GeneraError.noAutorizado('ID incorrecto')
+            console.log({data11:data})
 
         return { Data:data}
 
+    }
+
+    public async GetCredenciales ( id:string ) {
+        const data = JSON.parse(cryptoAdapter.muestraSecreto(id))
+        return data
     }
 }

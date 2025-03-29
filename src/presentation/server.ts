@@ -14,6 +14,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session'
 import cors from 'cors';
+import fileUpload from 'express-fileupload'
 
 //---- Interfaz del servidor
 interface Options {
@@ -56,6 +57,10 @@ export class Server {
   //---- Configuracion de los tipos de datos que acepta el servidor 
     this.app.use( express.json() ); // raw
     this.app.use( express.urlencoded({ extended: true }) ); // x-www-form-urlencoded
+
+    this.app.use(fileUpload({
+      limits: { fileSize: 50 * 1024 * 1024 },
+    }));
 
     //* Routes
     this.app.use( this.routes ); // usar las ruras de la aplicacion

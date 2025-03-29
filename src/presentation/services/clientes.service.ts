@@ -1,6 +1,7 @@
 import { constrainedMemory } from "process";
 import { GeneraError } from "../../core";
 import { db } from "../../data/mysql/db/coneccion";
+import { AgregarComisionistaDto } from "../../core/DTOS/Comisionista/agrega-comisionista.dto";
 
 
 export class ClientesServicio{
@@ -34,5 +35,11 @@ export class ClientesServicio{
             console.log(error)
             throw GeneraError.servidorInterno( `${error}` )
         }
+    }
+
+    public async AgregaComisionista ( agregarComisionistaDto:AgregarComisionistaDto ) {
+
+        return {mensaje:'Agregado Correctamente'}
+
     }
 }

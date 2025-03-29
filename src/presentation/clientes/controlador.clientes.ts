@@ -1,6 +1,8 @@
 import { Response, Request } from "express";
 import { GeneraError } from "../../core";
 import { ClientesServicio } from "../services/clientes.service";
+import { AgregarComisionistaDto } from "../../core/DTOS/Comisionista/agrega-comisionista.dto";
+import { UploadedFile } from "express-fileupload";
 
 
 export class ClientesControlador {
@@ -36,6 +38,22 @@ export class ClientesControlador {
         .then(( municipio ) => res.json( municipio ))
         .catch( error => this.manejadorErrores( error, res ) )
         
+    }
+
+    agregaComisionista = ( req:Request, res:Response ) =>{
+
+        // console.log(req.body)
+        const type = req.params.type;
+        const file = req.body.files as UploadedFile[]
+        // const file = req.body.files.at(0) as UploadedFile;
+        // console.log(file)
+
+        const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body )
+        if( error ) return res.status( 400 ).json( { error } )
+
+        this.clientesServicio.AgregaComisionista( agregarComisionistaDto! )
+        .then( ( resultado ) => { res.json( resultado ) } )
+        .catch( error => this.manejadorErrores( error, res ) )
 
     }
 

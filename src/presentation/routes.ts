@@ -13,6 +13,8 @@ import { Router } from 'express';
 import { AutenticacionRutas } from './auth/rutas';
 import { InicioRutas } from './inicio/rutas.inicio';
 import { ClientesRutas } from './clientes/rutas.clientes';
+import { FileUloadRoutes } from './file-upload/rutas.fileUpload';
+import { FileDownloadRoutes } from './file-download/rutas.file.download';
 
 //---- Clase de las rutas
 export class AppRoutes {
@@ -25,7 +27,10 @@ export class AppRoutes {
     router.use('/auth', AutenticacionRutas.routes );
     router.use('/inicio', InicioRutas.routes);
     router.use('/clientes/comisionistas', ClientesRutas.routes);
+    router.use('/upload', FileUloadRoutes.routes)
+    router.use('/download', FileDownloadRoutes.routes)
 
+    
     return router;
   }
 

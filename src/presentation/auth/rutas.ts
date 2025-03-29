@@ -23,7 +23,10 @@ export class AutenticacionRutas {
         router.post('/logOut', controlador.terminarSession);
 
         router.post('/modulo', controlador.GetModuloPerfil);
+
         router.post('/getModuloId', controlador.GetModuloId);
+        
+        router.post('/credenciales', controlador.GetCredenciales)
 
 
         // router.post('/cookie', function(req, res){

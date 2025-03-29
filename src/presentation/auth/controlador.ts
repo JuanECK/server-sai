@@ -24,12 +24,14 @@ export class AutenticacionControlador {
     }
 
     registroUsuario = ( req:Request, res:Response ) =>{
+
         const[ error, registroDto ] = RegistroUsusarioDto.crear( req.body );
         if( error ) return res.status( 400 ).json( { error } );
 
         this.autentucacionServicio.registroUsuario( registroDto! )
         .then( ( usuario ) => res.json( usuario ) )
         .catch( error => this.manejadorErrores( error, res ) )
+        
     }
 
     coockie = async ( req:Request, res:Response ) => {
@@ -126,6 +128,14 @@ export class AutenticacionControlador {
         .then( ( result ) => { res.json( result.Data.id_Perfil )} )
         .catch( error => this.manejadorErrores( error, res ) )
 
+    }
+
+    GetCredenciales = async ( req:Request, res:Response ) => {
+        const { id } = req.body;
+
+        this.autentucacionServicio.GetCredenciales( id )
+        .then( ( result ) => {res.json( result )} )
+        .catch( error => this.manejadorErrores( error, res ) )
     }
 
 
