@@ -8,50 +8,94 @@ import { CalculaMB } from "../../config/calculaMB.adapter";
 export class FileUploadService {
 
     constructor(
-        private readonly uuid = Uuid.v4 ){}
+        private readonly uuid = Uuid.v4) { }
 
-    private checkFolder( folderPath:string ){
-        if ( !fs.existsSync(folderPath)){
+    private checkFolder(folderPath: string) {
+        if (!fs.existsSync(folderPath)) {
             fs.mkdirSync(folderPath)
         }
     }
 
-    async uploadSingle( file:UploadedFile, folder:string = 'uploads', validExtensions:string[] = ['pdf'] ){
-    // async uploadSingle( file:UploadedFile, folder:string = 'uploads', validExtensions:string[] = ['png','jpg','jpeg','pdf'] ){
+    async uploadSingle(file: UploadedFile, index: number, folder: string = 'uploads', validExtensions: string[] = ['pdf']) {
+        // async uploadSingle( file:UploadedFile, folder:string = 'uploads', validExtensions:string[] = ['png','jpg','jpeg','pdf'] ){
 
-        try{
+        try {
             const fileExtension = file.mimetype.split('/').at(1) ?? '';
-            if( !validExtensions.includes( fileExtension ) ){
-                throw GeneraError.badRespuesta( `Extension invalida: ${ fileExtension}, !!Solo se admiten estas extensiones: ${validExtensions}` )
+            if (!validExtensions.includes(fileExtension)) {
+                throw GeneraError.badRespuesta(`Extension invalida: ${fileExtension}, !!Solo se admiten estas extensiones: ${validExtensions}`)
                 // throw new Error( `Extension invalida: ${ fileExtension}, !!Solo se admiten estas extensiones: ${validExtensions}` )
             }
 
-            if( file.size > 1 * 1024 * 1024 ){
+            if (file.size > 1 * 1024 * 1024) {
 
-                throw GeneraError.badRespuesta( `Tamaño de archivo excedido: ${ CalculaMB.bytesToSize(file.size) }, !!Solo se admiten archivos de 1MB` )
+                throw GeneraError.badRespuesta(`Tamaño de archivo excedido: ${CalculaMB.bytesToSize(file.size)}, !!Solo se admiten archivos de 1MB`)
                 // throw GeneraError.badRespuesta( `Tamaño de archivo excedido: ${ file.size } bytes, !!Solo se admiten archivos de 1MB` )
 
             }
 
+            const destination = path.resolve(__dirname, '../../../', folder);
+            this.checkFolder(destination);
 
-            const destination = path.resolve( __dirname, '../../../', folder );
-            this.checkFolder( destination );
-            
-            const fileName = `${ this.uuid() }.${ fileExtension }`
+            const fileName = `${this.uuid()}.${fileExtension}`
 
-            file.mv(`${ destination }/${ fileName }`)
+            file.mv(`${destination}/${fileName}`)
+
+            // console.log(file)
 
 
-            return {fileName}
+            return { fileName }
 
         }
-        catch ( error ){
-            console.log( error )
+        catch (error) {
+            console.log(error)
             throw error
-            
 
         }
 
+    }
+
+    public async uploadDocument(files: UploadedFile[], folder: string = 'uploads', validExtensions: string[] = ['pdf']) {
+
+        const filesName = await Promise.all(
+
+            files.map((file, index) => this.uploadSingle(file, index, folder, validExtensions))
+
+        )
+
+        return filesName
+    }
+
+
+    // public async updateDocument(files: UploadedFile[], folder: string = 'uploads', comprobantesNames:any, validExtensions: string[] = ['pdf']) {
+
+    //     console.log(comprobantesNames)
+
+    //     this.deleteFile( comprobantesNames, folder )
+        
+    //     const filesName = await Promise.all(
+
+    //         files.map((file, index) => this.uploadSingle(file, index, folder, validExtensions))
+
+    //     )
+
+    //     return filesName
+    // }
+
+
+    
+    public async deleteFile( fileName:any, type:string ) {
+        // console.log({Arr:fileName, foler:type})
+        for(let key in fileName){
+
+            const filePath = path.resolve( __dirname,`../../../${type}/${fileName[key]}`)
+
+            fs.unlink(filePath, (err)=>{
+
+                console.log(filePath)
+                
+            })
+        }
+        return true
     }
 
 }

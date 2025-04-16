@@ -26,9 +26,12 @@ export class AgregarComisionistaDto {
         public Id_Estado: string,
         public Id_Municipio: string,
         public CP: string,
+        public estatus: string,
+        public Id_ICPC: string,
     ) { }
 
     static crear(objeto: { [key: string]: any }): [string?, AgregarComisionistaDto?] {
+    // static crear(objeto: { [key: string]: any }, uso:string): [string?, AgregarComisionistaDto?] {
         const { nombre,
             fisica_moral,
             correo,
@@ -50,7 +53,9 @@ export class AgregarComisionistaDto {
             Colonia,
             Id_Estado,
             Id_Municipio,
-            CP, } = objeto;
+            CP,
+            estatus,
+            Id_ICPC,} = objeto;
 
             if(!nombre) return ['Falta  Nombre o Razón social']
             if(!fisica_moral) return ['Falta Persona Fisica o Moral']
@@ -65,7 +70,7 @@ export class AgregarComisionistaDto {
             // if(!RFC) return ['Falta ']
             // if(!Comprobante_domicilio) return ['Falta ']
             // if(!INE) return ['Falta ']
-            // if(!Referido) return ['Falta ']
+            if(!Referido) return ['Falta una referencia Interna']
             // if(!Fecha_contrato) return ['Falta ']
             if(!Calle) return ['Falta ']
             // if(!No_Exterior) return ['Falta ']
@@ -98,7 +103,9 @@ export class AgregarComisionistaDto {
             Colonia,
             Id_Estado,
             Id_Municipio,
-            CP
+            CP,
+            estatus,
+            Id_ICPC
         )]
     }
 }

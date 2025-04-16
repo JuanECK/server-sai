@@ -15,7 +15,7 @@ export class FileUloadRoutes {
         router.use( TypeMiddleware.validTypes( ['comisionistas'] ));
 
 
-        router.post( '/single/:type',controller.uploadFile )
+        // router.post( '/single/:type',controller.uploadFile )
         return router;
     }
 

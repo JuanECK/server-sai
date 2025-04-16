@@ -22,13 +22,13 @@ constructor(
         }
 
 
-    uploadFile = async ( req:Request, res:Response ) => {
-        const type = req.params.type;
-        const file = req.body.files.at(0) as UploadedFile;
+    // uploadFile = async ( req:Request, res:Response ) => {
+    //     const type = req.params.type;
+    //     const file = req.body.files.at(0) as UploadedFile;
 
-        this.fileUploadService.uploadSingle( file, `uploads/${ type }` )
-        .then( uploaded => res.json( uploaded ) )
-        .catch( error => this.manejadorErrores( error, res) ) 
-    }  
+    //     this.fileUploadService.uploadSingle( file, `uploads/${ type }` )
+    //     .then( uploaded => res.json( uploaded ) )
+    //     .catch( error => this.manejadorErrores( error, res) ) 
+    // }  
 
 }
