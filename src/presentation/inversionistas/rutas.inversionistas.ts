@@ -1,17 +1,18 @@
 import { Router } from "express";
 import { ClientesServicio } from "../services/clientes.service";
-import { ClientesControlador } from "./controlador.clientes";
+import { InversionistasControlador } from "./controlador.inversionistas";
 import { FileUploadMiddelware } from "../middlewares/file.upload.middleware";
 import { TypeMiddleware } from "../middlewares/type.middleware";
 import { FileActualizedMiddelware } from "../middlewares/file.Actualizad.middleware";
+import { InversionistasServicio } from "../services/inversionistas.service";
 
 
-export class ClientesRutas {
+export class InversionistasRutas {
 
     static get routes():Router{
         const router = Router();
-        const clientesServicio = new ClientesServicio();
-        const controlador = new ClientesControlador( clientesServicio );
+        const inversionistasServicio = new InversionistasServicio();
+        const controlador = new InversionistasControlador( inversionistasServicio );
 
         // router.use( FileUploadMiddelware.containFiles);
         // router.use( TypeMiddleware.validTypes( ['comisionistas'] ));
@@ -26,9 +27,9 @@ export class ClientesRutas {
         router.post('/busqueda', controlador.getBusqueda)
         router.post('/registraInversionista', controlador.registraInversionista)
         router.post('/eliminarRegistro', controlador.setEliminarRegistro)
-        router.post('/cargaComisionista', controlador.cargaComisionistaId)
-        router.post('/actualizaComisionista/:type', FileActualizedMiddelware.containFiles, TypeMiddleware.validTypes( ['comisionistas'] ), controlador.setActualizaComisionista)
-        router.post('/agregaComisionista/:type', FileUploadMiddelware.containFiles, TypeMiddleware.validTypes( ['comisionistas'] ),   controlador.agregaComisionista)
+        router.post('/cargaInversionista', controlador.cargaInversionistaId)
+        router.post('/actualizaInversionista/:type', FileActualizedMiddelware.containFiles, TypeMiddleware.validTypes( ['comisionistas','inversionista'] ), controlador.setActualizaInversionista)
+        router.post('/agregaInversionista/:type', FileUploadMiddelware.containFiles, TypeMiddleware.validTypes( ['comisionistas','inversionista'] ),   controlador.agregaInversionista)
         
         return router;
     }

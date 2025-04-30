@@ -5,7 +5,7 @@ export class AgregarComisionistaDto {
 
     private constructor(
         public nombre: string,
-        public fisica_moral: boolean,
+        public fisica_moral: string,
         public correo: string,
         public telefono: string,
         public usuario: string,
@@ -72,12 +72,12 @@ export class AgregarComisionistaDto {
             // if(!INE) return ['Falta ']
             if(!Referido) return ['Falta una referencia Interna']
             // if(!Fecha_contrato) return ['Falta ']
-            if(!Calle) return ['Falta ']
+            if(!Calle) return ['Falta la Calle']
             // if(!No_Exterior) return ['Falta ']
             // if(!No_Interior) return ['Falta ']
             // if(!Colonia) return ['Falta ']
-            if(!Id_Estado) return ['Falta ']
-            if(!Id_Municipio) return ['Falta ']
+            if(!Id_Estado) return ['Falta el Estado']
+            if(!Id_Municipio) return ['Falta el Municipio']
             // if(!CP) return ['Falta']
 
             // continuar

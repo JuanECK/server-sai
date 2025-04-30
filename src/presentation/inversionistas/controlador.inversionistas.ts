@@ -4,12 +4,14 @@ import { ClientesServicio } from "../services/clientes.service";
 import { AgregarComisionistaDto } from "../../core/DTOS/Comisionista/agrega-comisionista.dto";
 import { UploadedFile } from "express-fileupload";
 import { RegistraInversionistaDto } from "../../core/DTOS/Comisionista/registra-inversionista.dto";
+import { InversionistasServicio } from "../services/inversionistas.service";
+import { AgregarInversionistaDto } from "../../core/DTOS/inversionista/agrega-inversionista.dto";
 
 
-export class ClientesControlador {
+export class InversionistasControlador {
 
     constructor(
-        public readonly clientesServicio:ClientesServicio,
+        public readonly inversionistasServicio:InversionistasServicio,
     ){}
 
         private manejadorErrores = ( error: unknown, res:Response ) => {
@@ -24,44 +26,11 @@ export class ClientesControlador {
     
         }
 
-    // getEstado = ( req:Request, res:Response ) => {
-        
-    //     this.clientesServicio.getEstado()
-    //     .then(( estado ) => res.json( estado ))
-    //     .catch( error => this.manejadorErrores( error, res ) )
-    //     // res.json('exitosa')
-
-    // }
-    // getReferidoComisionista = ( req:Request, res:Response ) => {
-        
-    //     this.clientesServicio.getReferidoComisionista()
-    //     .then(( estado ) => res.json( estado ))
-    //     .catch( error => this.manejadorErrores( error, res ) )
-    //     // res.json('exitosa')
-
-    // }
-
-    // getReferidoBRK = ( req:Request, res:Response ) => {
-        
-    //     this.clientesServicio.getReferidoBRK()
-    //     .then(( estado ) => res.json( estado ))
-    //     .catch( error => this.manejadorErrores( error, res ) )
-    //     // res.json('exitosa')
-
-    // }
-
-    // getMunicipio = ( req:Request, res:Response ) => {
-       
-    //     this.clientesServicio.getMunicipio( req.body.estado )
-    //     .then(( municipio ) => res.json( municipio ))
-    //     .catch( error => this.manejadorErrores( error, res ) )
-        
-    // }
 
     getBusqueda = ( req:Request, res:Response ) =>{
 
         // console.log(req.body.criterio)
-        this.clientesServicio.getBusqueda( req.body.criterio )
+        this.inversionistasServicio.getBusqueda( req.body.criterio )
         .then(( municipio ) => res.json( municipio ))
         .catch( error => this.manejadorErrores( error, res ) )
         // res.json('exito')
@@ -69,20 +38,20 @@ export class ClientesControlador {
     }
 
     BusquedaAll = ( req:Request, res:Response ) =>{
-        this.clientesServicio.BusquedaAll()
+        this.inversionistasServicio.BusquedaAll()
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )
     }
 
-    cargaComisionistaId = ( req:Request, res:Response ) =>{
+    cargaInversionistaId = ( req:Request, res:Response ) =>{
 
-        this.clientesServicio.cargaComisionistaId(req.body.id)
+        this.inversionistasServicio.cargaInversionistaId(req.body.id)
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
 
-    setActualizaComisionista = ( req:Request, res:Response ) =>{
+    setActualizaInversionista = ( req:Request, res:Response ) =>{
 
         
         const type = req.params.type;
@@ -101,7 +70,7 @@ export class ClientesControlador {
         // res.json({ mensaje: 'Registro exitoso' })
 
 
-        this.clientesServicio.setActualizaComisionista( files, comprobantesNames, `uploads/${ type }`, agregarComisionistaDto! )
+        this.inversionistasServicio.setActualizaInversionista( files, comprobantesNames, `uploads/${ type }`, agregarComisionistaDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
@@ -114,7 +83,7 @@ export class ClientesControlador {
         // const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body, '1' )
         if( error ) return res.status( 400 ).json( { error } )
 
-        this.clientesServicio.registraInversionista( registraInversionistaDto! )
+        this.inversionistasServicio.registraInversionista( registraInversionistaDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
@@ -123,22 +92,23 @@ export class ClientesControlador {
     setEliminarRegistro = ( req:Request, res:Response ) =>{
 
 
-        this.clientesServicio.setEliminarRegistro( req.body )
+        this.inversionistasServicio.setEliminarRegistro( req.body )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
 
-    agregaComisionista = ( req:Request, res:Response ) =>{
+    agregaInversionista = ( req:Request, res:Response ) =>{
 
         const type = req.params.type;
         const files = req.body.files as UploadedFile[]
+       
 
-        const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body )
+        const [ error, agregarInversionistaDto ] = AgregarInversionistaDto.crear( req.body )
         // const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body, '1' )
         if( error ) return res.status( 400 ).json( { error } )
 
-        this.clientesServicio.AgregaComisionista( files, `uploads/${ type }`, agregarComisionistaDto! )
+        this.inversionistasServicio.AgregaInversionista( files, `uploads/${ type }`, agregarInversionistaDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
