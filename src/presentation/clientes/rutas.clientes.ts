@@ -33,7 +33,6 @@ export class ClientesRutas {
         return router;
     }
     
-// continuar - actualizar los archivos y actualizar los PDF si es necesario (evaluar si existen archivos a actualizar)
 
 
 }
