@@ -8,7 +8,7 @@ import { RegistraInversionistaDto } from "../../core/DTOS/Comisionista/registra-
 import { response } from "express";
 
 
-export class ClientesServicio {
+export class ComisionistasServicio {
     constructor(
         private readonly fileUploadService = new FileUploadService
     ) { }
@@ -155,7 +155,7 @@ export class ClientesServicio {
 
             console.log(registraInversionistaDto)
             const { usuario, Id_ICPC, BRK, Fecha_Nac, Beneficiario1, Fecha_Nac_Beneficiario1, Porcentaje_Beneficiario1, Beneficiario2, Fecha_Nac_Beneficiario2, Porcentaje_Beneficiario2, Beneficiario3, Fecha_Nac_Beneficiario3, Porcentaje_Beneficiario3, Beneficiario4, Fecha_Nac_Beneficiario4, Porcentaje_Beneficiario4, Beneficiario5, Fecha_Nac_Beneficiario5, Porcentaje_Beneficiario5, Recomendado, Fecha_Contrato, estatus } = registraInversionistaDto
-            const sql = 'sp_agrega_portafolio_BRK :usuario, :Id_ICPC, :BRK, :Fecha_Nac, :Beneficiario1, :Fecha_Nac_Beneficiario1, :Porcentaje_Beneficiario1, :Beneficiario2, :Fecha_Nac_Beneficiario2, :Porcentaje_Beneficiario2, :Beneficiario3, :Fecha_Nac_Beneficiario3, :Porcentaje_Beneficiario3, :Beneficiario4, :Fecha_Nac_Beneficiario4, :Porcentaje_Beneficiario4, :Beneficiario5, :Fecha_Nac_Beneficiario5, :Porcentaje_Beneficiario5, :Recomendado, :Fecha_Contrato, :estatus'
+            const sql = ' sp_agrega_portafolio_Inversionista :usuario, :Id_ICPC, :BRK, :Fecha_Nac, :Beneficiario1, :Fecha_Nac_Beneficiario1, :Porcentaje_Beneficiario1, :Beneficiario2, :Fecha_Nac_Beneficiario2, :Porcentaje_Beneficiario2, :Beneficiario3, :Fecha_Nac_Beneficiario3, :Porcentaje_Beneficiario3, :Beneficiario4, :Fecha_Nac_Beneficiario4, :Porcentaje_Beneficiario4, :Beneficiario5, :Fecha_Nac_Beneficiario5, :Porcentaje_Beneficiario5, :Recomendado, :Fecha_Contrato, :estatus'
             const registro = await db.query(sql, { replacements:{
                 usuario: usuario,
                 Id_ICPC: Id_ICPC,

@@ -1,12 +1,12 @@
 import { constrainedMemory } from "process";
 import { GeneraError } from "../../core";
 import { db } from "../../data/mysql/db/coneccion";
-import { AgregarComisionistaDto } from "../../core/DTOS/Comisionista/agrega-comisionista.dto";
 import { UploadedFile } from "express-fileupload";
 import { FileUploadService } from "./file-upload.service";
 import { RegistraInversionistaDto } from "../../core/DTOS/Comisionista/registra-inversionista.dto";
 import { response } from "express";
 import { AgregarInversionistaDto } from "../../core/DTOS/inversionista/agrega-inversionista.dto";
+import { EdicionInversionistaDto } from "../../core/DTOS/inversionista/edita-inversionista.dto";
 
 
 export class InversionistasServicio {
@@ -32,22 +32,26 @@ export class InversionistasServicio {
     public async getBusqueda( criterio:string ) {
         try {
 
+            let respuestaFinal
+
             if( criterio === '' ){
                 throw ('Sin criterio de busqueda');
             }
 
-            console.log(criterio)
-            const sql = 'sp_busqueda_BRK :parametro'
+            const sql = 'sp_busqueda_Inversionista :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
-
+            
+            console.log(busqueda)
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
-            if( respuesta.length === 0){
-                throw ('No se Encontraron Coincidencias')
+            if(respuesta[0].Resultado == 'Sindatos'){
+                respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
+
+            }else{
+                respuestaFinal = busqueda
             }
             
-
-            return busqueda
+            return respuestaFinal
 
         } catch (error) {
 
@@ -90,11 +94,15 @@ export class InversionistasServicio {
             const sql = 'sp_carga_Inversionista_seleccionado :Id_ICPC'
             const busqueda = await db.query( sql, { replacements:{ Id_ICPC:id } } )
 
-            const data  = JSON.parse(JSON.stringify(busqueda[0][0]))
+            const data  = JSON.parse(JSON.stringify(busqueda[0]))
 
-            for (let i = Object.keys(data).length - 1; i >= 27; i--) {
-                let dato = Object.keys(data)[i];
-                let valor = Object.values(data)[i];
+            data[0].BRK = data[0].BRK.replace(/\D/g, "")
+
+            // console.log(data)
+
+            for (let i = Object.keys(data[0]).length - 1; i >= 27; i--) {
+                let dato = Object.keys(data[0])[i];
+                let valor = Object.values(data[0])[i];
 
                 datosBeneficiario[0][dato] = valor
                 
@@ -109,6 +117,8 @@ export class InversionistasServicio {
                 // }
             }
 
+
+
             // console.log(Object.keys(datosBeneficiario[0]).length)
 
             
@@ -122,8 +132,8 @@ export class InversionistasServicio {
             // }
 
 
-            // console.log(datosBeneficiario)
-            return {busqueda:busqueda, datosBeneficiario:datosBeneficiario}
+            console.log(datosBeneficiario)
+            return {busqueda:data, datosBeneficiario:datosBeneficiario}
 
         } catch (error) {
 
@@ -139,9 +149,9 @@ export class InversionistasServicio {
 
             const { Id_ICPC, estatus, usuario } = valores
 
-            const sql = 'sp_desactiva_comisionista :Id_ICPC, :estatus, :usuario'
+            const sql = 'sp_desactiva_Inversionista :Id_ICPC, :usuario, :estatus '
 
-            const registro = await db.query( sql, { replacements:{ Id_ICPC:Id_ICPC, estatus:estatus, usuario:usuario } } )
+            const registro = await db.query( sql, { replacements:{ Id_ICPC:Id_ICPC, usuario:usuario, estatus:estatus } } )
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
 
@@ -163,7 +173,7 @@ export class InversionistasServicio {
 
             console.log(registraInversionistaDto)
             const { usuario, Id_ICPC, BRK, Fecha_Nac, Beneficiario1, Fecha_Nac_Beneficiario1, Porcentaje_Beneficiario1, Beneficiario2, Fecha_Nac_Beneficiario2, Porcentaje_Beneficiario2, Beneficiario3, Fecha_Nac_Beneficiario3, Porcentaje_Beneficiario3, Beneficiario4, Fecha_Nac_Beneficiario4, Porcentaje_Beneficiario4, Beneficiario5, Fecha_Nac_Beneficiario5, Porcentaje_Beneficiario5, Recomendado, Fecha_Contrato, estatus } = registraInversionistaDto
-            const sql = 'sp_agrega_portafolio_BRK :usuario, :Id_ICPC, :BRK, :Fecha_Nac, :Beneficiario1, :Fecha_Nac_Beneficiario1, :Porcentaje_Beneficiario1, :Beneficiario2, :Fecha_Nac_Beneficiario2, :Porcentaje_Beneficiario2, :Beneficiario3, :Fecha_Nac_Beneficiario3, :Porcentaje_Beneficiario3, :Beneficiario4, :Fecha_Nac_Beneficiario4, :Porcentaje_Beneficiario4, :Beneficiario5, :Fecha_Nac_Beneficiario5, :Porcentaje_Beneficiario5, :Recomendado, :Fecha_Contrato, :estatus'
+            const sql = 'sp_agrega_portafolio_Inversionista :usuario, :Id_ICPC, :BRK, :Fecha_Nac, :Beneficiario1, :Fecha_Nac_Beneficiario1, :Porcentaje_Beneficiario1, :Beneficiario2, :Fecha_Nac_Beneficiario2, :Porcentaje_Beneficiario2, :Beneficiario3, :Fecha_Nac_Beneficiario3, :Porcentaje_Beneficiario3, :Beneficiario4, :Fecha_Nac_Beneficiario4, :Porcentaje_Beneficiario4, :Beneficiario5, :Fecha_Nac_Beneficiario5, :Porcentaje_Beneficiario5, :Recomendado, :Fecha_Contrato, :estatus'
             const registro = await db.query(sql, { replacements:{
                 usuario: usuario,
                 Id_ICPC: Id_ICPC,
@@ -204,7 +214,7 @@ export class InversionistasServicio {
         }
     }
 
-    public async setActualizaInversionista(files: UploadedFile[], comprobantesNames:any, folder: string = 'uploads', agregarComisionistaDto: AgregarComisionistaDto) {
+    public async setActualizaInversionista(files: UploadedFile[], comprobantesNames:any, folder: string = 'uploads', agregarComisionistaDto: EdicionInversionistaDto) {
 
         try {
 
@@ -218,12 +228,12 @@ export class InversionistasServicio {
 
             
             
-            if( agregarComisionistaDto.Comprobante_domicilio == '' || agregarComisionistaDto.INE == '' ){
+            if( agregarComisionistaDto.Comprobante_Domicilio == '' || agregarComisionistaDto.INE == '' ){
                 console.log('Hay que actualizar')
                 const { NameDomicilio, NameIdentificacion } = comprobantesNames
                 let Arr = {fileName:'',fileName2:''}
 
-                if( agregarComisionistaDto.Comprobante_domicilio =='' ){
+                if( agregarComisionistaDto.Comprobante_Domicilio =='' ){
                     Arr.fileName = NameDomicilio
                 }
                 if( agregarComisionistaDto.INE =='' ){
@@ -239,7 +249,7 @@ export class InversionistasServicio {
 
 
                 if( Arr.fileName != ''){
-                    agregarComisionistaDto.Comprobante_domicilio = uploadDoc[0].fileName
+                    agregarComisionistaDto.Comprobante_Domicilio = uploadDoc[0].fileName
                 }
                 if( Arr.fileName2 !='' ){
                 agregarComisionistaDto.INE = uploadDoc[1].fileName
@@ -248,26 +258,49 @@ export class InversionistasServicio {
 
             console.log({agregarComisionistaDto:agregarComisionistaDto})
 
-            const { nombre, fisica_moral, correo, telefono, usuario, banco_cuenta, CLABE, fincash, Banco_tarjeta, tarjeta, RFC, Comprobante_domicilio, INE, Referido, Fecha_contrato, Calle, No_Exterior, No_Interior, Colonia, Id_Estado, Id_Municipio, CP, estatus, Id_ICPC } = agregarComisionistaDto
-            const sql = 'sp_actualiza_info_comisionista :nombre, :fisica_moral, :correo, :telefono, :usuario, :banco_cuenta, :CLABE, :fincash, :Banco_tarjeta, :tarjeta, :RFC, :Comprobante_domicilio, :INE, :Referido, :Fecha_contrato, :Calle, :No_Exterior, :No_Interior, :Colonia, :Id_Estado, :Id_Municipio, :CP, :estatus, :Id_ICPC '
+            // const { nombre, fisica_moral, correo, telefono, usuario, banco_cuenta, CLABE, fincash, Banco_tarjeta, tarjeta, RFC, Comprobante_domicilio, INE, Referido, Fecha_contrato, Calle, No_Exterior, No_Interior, Colonia, Id_Estado, Id_Municipio, CP, estatus, Id_ICPC } = agregarComisionistaDto
+            
+            const {  Id_ICPC, nombre, fisica_moral, correo, telefono, usuario, Fecha_Nac, RFC, Beneficiario1, Fecha_Nac_Beneficiario1, Porcentaje_Beneficiario1, Beneficiario2, Fecha_Nac_Beneficiario2, Porcentaje_Beneficiario2, Beneficiario3, Fecha_Nac_Beneficiario3, Porcentaje_Beneficiario3, Beneficiario4, Fecha_Nac_Beneficiario4, Porcentaje_Beneficiario4, Beneficiario5, Fecha_Nac_Beneficiario5, Porcentaje_Beneficiario5, Banco_cuenta, CLABE, FINCASH, Banco_Tarjeta, Tarjeta, INE, Comprobante_Domicilio, Recomendado, Fecha_Contrato, Calle, No_Exterior, No_Interior, Colonia, Id_Estado, Id_Municipio, CP, estatus,
+            } = agregarComisionistaDto
+            const sql =  'sp_actualiza_info_Inversionista :Id_ICPC, :nombre, :fisica_moral, :correo, :telefono, :usuario, :Fecha_Nac, :RFC, :Beneficiario1, :Fecha_Nac_Beneficiario1, :Porcentaje_Beneficiario1, :Beneficiario2, :Fecha_Nac_Beneficiario2, :Porcentaje_Beneficiario2, :Beneficiario3, :Fecha_Nac_Beneficiario3, :Porcentaje_Beneficiario3, :Beneficiario4, :Fecha_Nac_Beneficiario4, :Porcentaje_Beneficiario4, :Beneficiario5, :Fecha_Nac_Beneficiario5, :Porcentaje_Beneficiario5, :Banco_cuenta, :CLABE, :FINCASH, :Banco_Tarjeta, :Tarjeta, :INE, :Comprobante_Domicilio, :Recomendado, :Fecha_Contrato, :Calle, :No_Exterior, :No_Interior, :Colonia, :Id_Estado, :Id_Municipio, :CP, :estatus'
+
+            // const sql = 'sp_actualiza_info_comisionista :nombre, :fisica_moral, :correo, :telefono, :usuario, :banco_cuenta, :CLABE, :fincash, :Banco_tarjeta, :tarjeta, :RFC, :Comprobante_domicilio, :INE, :Referido, :Fecha_contrato, :Calle, :No_Exterior, :No_Interior, :Colonia, :Id_Estado, :Id_Municipio, :CP, :estatus, :Id_ICPC '
 
             const registro = await db.query(sql, {
                 replacements: {
+                    Id_ICPC: Id_ICPC,
                     nombre: nombre,
                     fisica_moral: fisica_moral,
                     correo: correo,
                     telefono: telefono,
+                    // BRK: BRK,
                     usuario: usuario,
-                    banco_cuenta: banco_cuenta,
-                    CLABE: CLABE,
-                    fincash: fincash,
-                    Banco_tarjeta: Banco_tarjeta,
-                    tarjeta: tarjeta,
+                    Fecha_Nac: Fecha_Nac,
                     RFC: RFC,
-                    Comprobante_domicilio: Comprobante_domicilio,
+                    Beneficiario1: Beneficiario1,
+                    Fecha_Nac_Beneficiario1: Fecha_Nac_Beneficiario1,
+                    Porcentaje_Beneficiario1: Porcentaje_Beneficiario1,
+                    Beneficiario2: Beneficiario2,
+                    Fecha_Nac_Beneficiario2: Fecha_Nac_Beneficiario2,
+                    Porcentaje_Beneficiario2: Porcentaje_Beneficiario2,
+                    Beneficiario3: Beneficiario3,
+                    Fecha_Nac_Beneficiario3: Fecha_Nac_Beneficiario3,
+                    Porcentaje_Beneficiario3: Porcentaje_Beneficiario3,
+                    Beneficiario4: Beneficiario4,
+                    Fecha_Nac_Beneficiario4: Fecha_Nac_Beneficiario4,
+                    Porcentaje_Beneficiario4: Porcentaje_Beneficiario4,
+                    Beneficiario5: Beneficiario5,
+                    Fecha_Nac_Beneficiario5: Fecha_Nac_Beneficiario5,
+                    Porcentaje_Beneficiario5: Porcentaje_Beneficiario5,
+                    Banco_cuenta: Banco_cuenta,
+                    CLABE: CLABE,
+                    FINCASH: FINCASH,
+                    Banco_Tarjeta: Banco_Tarjeta,
+                    Tarjeta: Tarjeta,
                     INE: INE,
-                    Referido: Referido,
-                    Fecha_contrato: Fecha_contrato,
+                    Comprobante_Domicilio: Comprobante_Domicilio,
+                    Recomendado: Recomendado,
+                    Fecha_Contrato: Fecha_Contrato,
                     Calle: Calle,
                     No_Exterior: No_Exterior,
                     No_Interior: No_Interior,
@@ -275,8 +308,7 @@ export class InversionistasServicio {
                     Id_Estado: Id_Estado,
                     Id_Municipio: Id_Municipio,
                     CP: CP,
-                    estatus: estatus, 
-                    Id_ICPC: Id_ICPC,
+                    estatus:estatus
                 }
             })
 
@@ -301,6 +333,7 @@ export class InversionistasServicio {
         // console.log({Archivos:files})
         // console.log({Datos:agregarInversionistaDto})
 
+
         try {
 
             const fileNames = await this.fileUploadService.getNameFile( files )
@@ -320,7 +353,7 @@ export class InversionistasServicio {
             const {  nombre, fisica_moral, correo, telefono, BRK, usuario, Fecha_Nac, RFC, Beneficiario1, Fecha_Nac_Beneficiario1, Porcentaje_Beneficiario1, Beneficiario2, Fecha_Nac_Beneficiario2, Porcentaje_Beneficiario2, Beneficiario3, Fecha_Nac_Beneficiario3, Porcentaje_Beneficiario3, Beneficiario4, Fecha_Nac_Beneficiario4, Porcentaje_Beneficiario4, Beneficiario5, Fecha_Nac_Beneficiario5, Porcentaje_Beneficiario5, Banco_cuenta, CLABE, FINCASH, Banco_Tarjeta, Tarjeta, INE, Comprobante_Domicilio, Recomendado, Fecha_Contrato, Calle, No_Exterior, No_Interior, Colonia, Id_Estado, Id_Municipio, CP,
              } = agregarInversionistaDto
 
-            const sql =  'sp_inserta_brk :nombre, :fisica_moral, :correo, :telefono, :BRK, :usuario, :Fecha_Nac, :RFC, :Beneficiario1, :Fecha_Nac_Beneficiario1, :Porcentaje_Beneficiario1, :Beneficiario2, :Fecha_Nac_Beneficiario2, :Porcentaje_Beneficiario2, :Beneficiario3, :Fecha_Nac_Beneficiario3, :Porcentaje_Beneficiario3, :Beneficiario4, :Fecha_Nac_Beneficiario4, :Porcentaje_Beneficiario4, :Beneficiario5, :Fecha_Nac_Beneficiario5, :Porcentaje_Beneficiario5, :Banco_cuenta, :CLABE, :FINCASH, :Banco_Tarjeta, :Tarjeta, :INE, :Comprobante_Domicilio, :Recomendado, :Fecha_Contrato, :Calle, :No_Exterior, :No_Interior, :Colonia, :Id_Estado, :Id_Municipio, :CP'
+            const sql =  'sp_inserta_Inversionista :nombre, :fisica_moral, :correo, :telefono, :BRK, :usuario, :Fecha_Nac, :RFC, :Beneficiario1, :Fecha_Nac_Beneficiario1, :Porcentaje_Beneficiario1, :Beneficiario2, :Fecha_Nac_Beneficiario2, :Porcentaje_Beneficiario2, :Beneficiario3, :Fecha_Nac_Beneficiario3, :Porcentaje_Beneficiario3, :Beneficiario4, :Fecha_Nac_Beneficiario4, :Porcentaje_Beneficiario4, :Beneficiario5, :Fecha_Nac_Beneficiario5, :Porcentaje_Beneficiario5, :Banco_cuenta, :CLABE, :FINCASH, :Banco_Tarjeta, :Tarjeta, :INE, :Comprobante_Domicilio, :Recomendado, :Fecha_Contrato, :Calle, :No_Exterior, :No_Interior, :Colonia, :Id_Estado, :Id_Municipio, :CP'
 
             const registro = await db.query(sql, {
                 replacements: {

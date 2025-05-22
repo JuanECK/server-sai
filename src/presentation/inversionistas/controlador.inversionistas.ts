@@ -1,9 +1,7 @@
 import { Response, Request } from "express";
 import { GeneraError } from "../../core";
-import { ClientesServicio } from "../services/clientes.service";
-import { AgregarComisionistaDto } from "../../core/DTOS/Comisionista/agrega-comisionista.dto";
 import { UploadedFile } from "express-fileupload";
-import { RegistraInversionistaDto } from "../../core/DTOS/Comisionista/registra-inversionista.dto";
+import { EdicionInversionistaDto } from '../../core/DTOS/inversionista/edita-inversionista.dto'
 import { InversionistasServicio } from "../services/inversionistas.service";
 import { AgregarInversionistaDto } from "../../core/DTOS/inversionista/agrega-inversionista.dto";
 
@@ -60,34 +58,34 @@ export class InversionistasControlador {
         
         // console.log( req.body )
 
-        const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body )
+        const [ error, edicionComisionistaDto ] = EdicionInversionistaDto.crear( req.body )
         // const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body, '2' )
         if( error ) return res.status( 400 ).json( { error } )
 
         // console.log(files)
-        // console.log(agregarComisionistaDto)
+        // console.log(edicionComisionistaDto)
 
         // res.json({ mensaje: 'Registro exitoso' })
 
 
-        this.inversionistasServicio.setActualizaInversionista( files, comprobantesNames, `uploads/${ type }`, agregarComisionistaDto! )
+        this.inversionistasServicio.setActualizaInversionista( files, comprobantesNames, `uploads/${ type }`, edicionComisionistaDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
 
-    registraInversionista = ( req:Request, res:Response ) =>{
+    // registraInversionista = ( req:Request, res:Response ) =>{
 
 
-        const [ error, registraInversionistaDto ] = RegistraInversionistaDto.crear ( req.body )
-        // const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body, '1' )
-        if( error ) return res.status( 400 ).json( { error } )
+    //     const [ error, registraInversionistaDto ] = RegistraInversionistaDto.crear ( req.body )
+    //     // const [ error, agregarComisionistaDto ] = AgregarComisionistaDto.crear( req.body, '1' )
+    //     if( error ) return res.status( 400 ).json( { error } )
 
-        this.inversionistasServicio.registraInversionista( registraInversionistaDto! )
-        .then( ( resultado ) => { res.json( resultado ) } )
-        .catch( error => this.manejadorErrores( error, res ) )
+    //     this.inversionistasServicio.registraInversionista( registraInversionistaDto! )
+    //     .then( ( resultado ) => { res.json( resultado ) } )
+    //     .catch( error => this.manejadorErrores( error, res ) )
 
-    }
+    // }
 
     setEliminarRegistro = ( req:Request, res:Response ) =>{
 

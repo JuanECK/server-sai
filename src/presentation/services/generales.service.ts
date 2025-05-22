@@ -28,7 +28,7 @@ export class GeneralesServicio {
     public async getReferidoBRK() {
         try {
 
-            const sql = 'sp_carga_recomendado_brk'
+            const sql = 'sp_carga_recomendado_Inversionista'
             const BRK = await db.query(sql)
             return BRK;
 

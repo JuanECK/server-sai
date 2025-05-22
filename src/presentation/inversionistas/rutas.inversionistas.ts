@@ -1,5 +1,4 @@
 import { Router } from "express";
-import { ClientesServicio } from "../services/clientes.service";
 import { InversionistasControlador } from "./controlador.inversionistas";
 import { FileUploadMiddelware } from "../middlewares/file.upload.middleware";
 import { TypeMiddleware } from "../middlewares/type.middleware";
@@ -25,11 +24,11 @@ export class InversionistasRutas {
         
         router.get('/busquedaAll', controlador.BusquedaAll)
         router.post('/busqueda', controlador.getBusqueda)
-        router.post('/registraInversionista', controlador.registraInversionista)
+        // router.post('/registraInversionista', controlador.registraInversionista)
         router.post('/eliminarRegistro', controlador.setEliminarRegistro)
         router.post('/cargaInversionista', controlador.cargaInversionistaId)
-        router.post('/actualizaInversionista/:type', FileActualizedMiddelware.containFiles, TypeMiddleware.validTypes( ['comisionistas','inversionista'] ), controlador.setActualizaInversionista)
-        router.post('/agregaInversionista/:type', FileUploadMiddelware.containFiles, TypeMiddleware.validTypes( ['comisionistas','inversionista'] ),   controlador.agregaInversionista)
+        router.post('/actualizaInversionista/:type', FileActualizedMiddelware.containFiles, TypeMiddleware.validTypes( ['inversionista'] ), controlador.setActualizaInversionista)
+        router.post('/agregaInversionista/:type', FileUploadMiddelware.containFiles, TypeMiddleware.validTypes( ['inversionista'] ), controlador.agregaInversionista)
         
         return router;
     }

@@ -1,26 +1,17 @@
 import { Router } from "express";
-import { ClientesServicio } from "../services/clientes.service";
-import { ClientesControlador } from "./controlador.clientes";
+import { ComisionistasServicio } from "../services/comisionistas.service";
+import { ComisionistasControlador } from "./controlador.comisionistas";
 import { FileUploadMiddelware } from "../middlewares/file.upload.middleware";
 import { TypeMiddleware } from "../middlewares/type.middleware";
 import { FileActualizedMiddelware } from "../middlewares/file.Actualizad.middleware";
 
 
-export class ClientesRutas {
+export class ComisionistasRutas {
 
     static get routes():Router{
         const router = Router();
-        const clientesServicio = new ClientesServicio();
-        const controlador = new ClientesControlador( clientesServicio );
-
-        // router.use( FileUploadMiddelware.containFiles);
-        // router.use( TypeMiddleware.validTypes( ['comisionistas'] ));
-        
-
-        // router.get('/estado', controlador.getEstado)
-        // router.get('/ReferidoBRK', controlador.getReferidoBRK)
-        // router.get('/ReferidoComisionista', controlador.getReferidoComisionista)
-        // router.post('/municipio', controlador.getMunicipio)
+        const clientesServicio = new ComisionistasServicio();
+        const controlador = new ComisionistasControlador( clientesServicio );
         
         router.get('/busquedaAll', controlador.BusquedaAll)
         router.post('/busqueda', controlador.getBusqueda)
