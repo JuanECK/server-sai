@@ -10,9 +10,9 @@ export class FileDownloadRoutes {
 
         const router = Router();
         const controller = new FileDownloadControlador();
+            router.get( '/:type/:fileName', controller.downloadFile)
+            return router;
 
-        router.get( '/:type/:fileName', controller.downloadFile)
-        return router;
     }
 
 }

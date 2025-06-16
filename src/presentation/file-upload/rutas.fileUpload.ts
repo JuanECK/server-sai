@@ -12,7 +12,7 @@ export class FileUloadRoutes {
         const controller = new FileUploadControlador( new FileUploadService() );
 
         router.use( FileUploadMiddelware.containFiles);
-        router.use( TypeMiddleware.validTypes( ['comisionistas, inversionista'] ));
+        router.use( TypeMiddleware.validTypes( ['comisionistas, inversionista, Financiamiento, movInmobiliario, movInvercion, movOficina, movProveedor'] ));
 
 
         // router.post( '/single/:type',controller.uploadFile )

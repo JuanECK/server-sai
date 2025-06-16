@@ -2,12 +2,12 @@
 import { GeneraError } from "../../core";
 import { db } from "../../data/mysql/db/coneccion";
 import { FileUploadService } from "./file-upload.service";
-import { AgregaObservacionesDto } from "../../core/DTOS/observaciones/agrega-observaciones.dto";
-import { EditaObservacionesDto } from "../../core/DTOS/observaciones/edita-observaciones.dto";
-import { AsignaObservacionesDto } from "../../core/DTOS/observaciones/asigna-observaciones.dto";
+import { AgregaPrestamosDto } from "../../core/DTOS/movPrestamos/agrega-Prestamos.dto";
+import { EditaPrestamosDto } from "../../core/DTOS/movPrestamos/edita-Prestamos.dto";
+import { AsignaPrestamosDto } from "../../core/DTOS/movPrestamos/asigna-Prestamos.dto";
 
 
-export class ObservacionesServicio {
+export class PrestamosServicio {
     constructor(
         private readonly fileUploadService = new FileUploadService
     ) { }
@@ -15,7 +15,7 @@ export class ObservacionesServicio {
     public async BusquedaAll() {
         try {
 
-            const sql = 'sp_carga_Observaciones_Bancaria'
+            const sql = 'sp_carga_Prestamos_Bancaria'
             const listaAll = await db.query(sql)
             
             return listaAll
@@ -27,10 +27,10 @@ export class ObservacionesServicio {
         }
     }
 
-    public async getCuentasListas() {
+    public async getCargaDataInicio() {
         try {
 
-            const sql = 'sp_carga_cuentas_list'
+            const sql = 'sp_carga_cuentas_prestamos_list'
             const listaAll = await db.query(sql)
             
             return listaAll
@@ -45,7 +45,7 @@ export class ObservacionesServicio {
     public async getHistorico() {
         try {
 
-            const sql = 'sp_historico_Mov_NoReconocidos'
+            const sql = 'sp_historico_prestamoInterno'
             const listaAll = await db.query(sql)
             
             return listaAll
@@ -57,13 +57,13 @@ export class ObservacionesServicio {
         }
     }
 
-        public async prestamo( Id_Mov_RN:string ) {
+        public async prestamo( Id_Fondeo:string ) {
             try {
     
                 
-                const sql = 'sp_cambia_pagado_movNR :Id_Mov_RN, :pagado '
+                const sql = 'sp_cambia_pagado_prestamoInterno :Id_Mov_RN, :pagado '
                 
-                const registro = await db.query( sql, { replacements:{ Id_Mov_RN:Id_Mov_RN, pagado:1 } } )
+                const registro = await db.query( sql, { replacements:{ Id_Mov_RN:Id_Fondeo, pagado:1 } } )
                 
                 const response = JSON.parse(JSON.stringify(registro[0][0]))
                 
@@ -81,45 +81,45 @@ export class ObservacionesServicio {
             }
         }
 
-    public async getBusqueda( criterio:string ) {
+    // public async getBusqueda( criterio:string ) {
+    //     try {
+
+    //         console.log(criterio)
+
+    //          let respuestaFinal
+
+    //         if( criterio === '' ){
+    //             throw ('Sin criterio de busqueda');
+    //         }
+
+    //         console.log(criterio)
+    //         const sql = 'sp_busqueda_listado_clientes :parametro'
+    //         const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
+            
+    //         const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+    //         console.log(respuesta)
+
+    //         if( respuesta[0].Resultado == 'Sindatos'){
+    //             respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
+    //         }else{
+    //             respuestaFinal = busqueda
+    //         }
+            
+    //         return respuestaFinal
+
+    //     } catch (error) {
+
+    //         console.log(error);
+    //         throw GeneraError.noEncontrado(`${error}`)
+    //     }
+    // }
+
+    public async cargaPrestamosId( id:string ) {
         try {
 
-            console.log(criterio)
-
-             let respuestaFinal
-
-            if( criterio === '' ){
-                throw ('Sin criterio de busqueda');
-            }
-
-            console.log(criterio)
-            const sql = 'sp_busqueda_listado_clientes :parametro'
-            const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
             
-            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
-            console.log(respuesta)
-
-            if( respuesta[0].Resultado == 'Sindatos'){
-                respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
-            }else{
-                respuestaFinal = busqueda
-            }
-            
-            return respuestaFinal
-
-        } catch (error) {
-
-            console.log(error);
-            throw GeneraError.noEncontrado(`${error}`)
-        }
-    }
-
-    public async cargaObservacionesId( id:string ) {
-        try {
-
-            
-            const sql = 'sp_carga_movNR_seleccionado :Id_Mov_RN'
-            const busqueda = await db.query( sql, { replacements:{ Id_Mov_RN:id } } )
+            const sql = 'sp_carga_prestamoInterno_seleccionado :Id_Fondeo'
+            const busqueda = await db.query( sql, { replacements:{ Id_Fondeo:id } } )
             // console.log(busqueda)
 
             const data  = JSON.parse(JSON.stringify(busqueda[0]))
@@ -133,16 +133,16 @@ export class ObservacionesServicio {
         }
     }
 
-    public async setEliminarObservaciones( valores:any ) {
+    public async setEliminarPrestamos( valores:any ) {
         try {
 
             console.log( {'ver valores':valores} )
 
             const { Id, usuario, estatus} = valores
 
-            const sql = 'sp_desactiva_movNoReconocidos :Id_Mov_RN, :usuario, :estatus '
+            const sql = 'sp_desactiva_prestamoInterno :Id_Fondeo, :usuario, :estatus '
 
-            const registro = await db.query( sql, { replacements:{ Id_Mov_RN:Id, usuario:usuario, estatus:estatus} } )
+            const registro = await db.query( sql, { replacements:{ Id_Fondeo:Id, usuario:usuario, estatus:estatus} } )
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
 
@@ -159,7 +159,7 @@ export class ObservacionesServicio {
         }
     }
 
-    public async setAsignaMovimientoCliente( asignaObservacionesDto:AsignaObservacionesDto ) {
+    public async setAsignaMovimientoCliente( asignaPrestamosDto:AsignaPrestamosDto ) {
         try {
 
             // console.log( {'ver valores':valores} )
@@ -167,7 +167,7 @@ export class ObservacionesServicio {
             let respuestaFinal
             const { 
                 Id_Mov_RN, Id_ICPC, Tipo_Cliente, usuario,
-             } = asignaObservacionesDto
+             } = asignaPrestamosDto
 
             const sql = 'sp_asigna_mov_NoReconocido :Id_Mov_RN, :Id_ICPC, :Tipo_Cliente, :usuario'
 
@@ -197,27 +197,23 @@ export class ObservacionesServicio {
     }
 
 
-    public async setActualizaObservaciones( editaObservacionesDto: EditaObservacionesDto) {
+    public async setActualizaPrestamos( editaPrestamosDto: EditaPrestamosDto) {
 
         try {
 
-            console.log({Datos:editaObservacionesDto})
+            console.log({Datos:editaPrestamosDto})
 
-            const {    Id_Mov_RN, Tipo_Movimiento, Id_CuentaB, Monto, Fecha_Ingreso, Observaciones, usuario, estatus,
-             } = editaObservacionesDto
+            const {    Id_Fondeo, id_cuentaB, monto, usuario,
+             } = editaPrestamosDto
 
-            const sql =  'sp_actualiza_movNoReconocidos :Id_Mov_RN, :Tipo_Movimiento, :Id_CuentaB, :Monto, :Fecha_Ingreso, :Observaciones, :usuario, :estatus '
+            const sql =  'sp_actualiza_prestamoInterno :Id_Fondeo, :id_cuentaB, :monto, :usuario '
 
             const registro = await db.query(sql, {
             replacements: {
-            Id_Mov_RN: Id_Mov_RN,
-            Tipo_Movimiento: Tipo_Movimiento,
-            Id_CuentaB: Id_CuentaB,
-            Monto: Monto,
-            Fecha_Ingreso: Fecha_Ingreso,
-            Observaciones: Observaciones,
-            usuario: usuario,
-            estatus: estatus,
+                    Id_Fondeo: Id_Fondeo,
+                    id_cuentaB: id_cuentaB,
+                    monto: monto,
+                    usuario: usuario,
                 }
             })
 
@@ -237,23 +233,20 @@ export class ObservacionesServicio {
     }
 
 
-    public async agregaObservaciones( agregaObservacionesDto: AgregaObservacionesDto) {
+    public async agregaPrestamos( agregaPrestamosDto: AgregaPrestamosDto) {
         try {
 
-            console.log({Datos:agregaObservacionesDto})
+            console.log({Datos:agregaPrestamosDto})
 
-            const {    Tipo_Movimiento, Id_CuentaB, Monto, Fecha_Ingreso, Observaciones, usuario,
-             } = agregaObservacionesDto
+            const {  id_cuentaB, monto, usuario,
+             } = agregaPrestamosDto
 
-            const sql =  'sp_inserta_movNoReconocidos :Tipo_Movimiento, :Id_CuentaB, :Monto, :Fecha_Ingreso, :Observaciones, :usuario '
+            const sql =  'sp_inserta_prestamoInterno :id_cuentaB, :monto, :usuario '
              
             const registro = await db.query(sql, {
                 replacements: {
-                    Tipo_Movimiento: Tipo_Movimiento,
-                    Id_CuentaB: Id_CuentaB,
-                    Monto: Monto,
-                    Fecha_Ingreso: Fecha_Ingreso,
-                    Observaciones: Observaciones,
+                    id_cuentaB: id_cuentaB,
+                    monto: monto,
                     usuario: usuario,
                 }
             })

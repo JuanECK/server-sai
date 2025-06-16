@@ -1,15 +1,15 @@
 import { Response, Request } from "express";
 import { GeneraError } from "../../core";
-import { AgregaObservacionesDto } from "../../core/DTOS/observaciones/agrega-observaciones.dto";
-import { EditaObservacionesDto } from "../../core/DTOS/observaciones/edita-observaciones.dto";
-import { ObservacionesServicio } from "../services/observaciones.service";
-import { AsignaObservacionesDto } from "../../core/DTOS/observaciones/asigna-observaciones.dto";
+import { AgregaPrestamosDto } from "../../core/DTOS/movPrestamos/agrega-Prestamos.dto";
+import { EditaPrestamosDto } from "../../core/DTOS/movPrestamos/edita-Prestamos.dto";
+import { PrestamosServicio } from "../services/movPrestamos.service";
+import { AsignaPrestamosDto } from "../../core/DTOS/movPrestamos/asigna-Prestamos.dto";
 
 
-export class ObservacionesControlador {
+export class PrestamosControlador {
 
     constructor(
-        public readonly observacionesServicio:ObservacionesServicio,
+        public readonly prestamosServicio:PrestamosServicio,
     ){}
 
     private manejadorErrores = ( error: unknown, res:Response ) => {
@@ -26,42 +26,42 @@ export class ObservacionesControlador {
 
     prestamo = ( req:Request, res:Response ) =>{
 
-        this.observacionesServicio.prestamo( req.body.Id_Mov_RN )
+        this.prestamosServicio.prestamo( req.body.Id_Fondeo )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
 
-    getBusqueda = ( req:Request, res:Response ) =>{
-        // console.log(req.body.criterio)
-        this.observacionesServicio.getBusqueda( req.body.criterio )
-        .then(( municipio ) => res.json( municipio ))
-        .catch( error => this.manejadorErrores( error, res ) )
-        // res.json('exito')
-    }
+    // getBusqueda = ( req:Request, res:Response ) =>{
+    //     // console.log(req.body.criterio)
+    //     this.prestamosServicio.getBusqueda( req.body.criterio )
+    //     .then(( municipio ) => res.json( municipio ))
+    //     .catch( error => this.manejadorErrores( error, res ) )
+    //     // res.json('exito')
+    // }
 
     BusquedaAll = ( req:Request, res:Response ) =>{
-        this.observacionesServicio.BusquedaAll()
+        this.prestamosServicio.BusquedaAll()
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )
     }
 
-    getCuentasListas = ( req:Request, res:Response ) =>{
-        this.observacionesServicio.getCuentasListas()
+    getCargaDataInicio = ( req:Request, res:Response ) =>{
+        this.prestamosServicio.getCargaDataInicio()
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )
     }
 
     getHistorico = ( req:Request, res:Response ) =>{
-        this.observacionesServicio.getHistorico()
+        this.prestamosServicio.getHistorico()
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )
     }
 
-    setEliminarObservaciones = ( req:Request, res:Response ) =>{
+    setEliminarPrestamos = ( req:Request, res:Response ) =>{
 
 
-        this.observacionesServicio.setEliminarObservaciones( req.body )
+        this.prestamosServicio.setEliminarPrestamos( req.body )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
@@ -69,40 +69,40 @@ export class ObservacionesControlador {
 
     setAsignaMovimientoCliente = ( req:Request, res:Response ) =>{
 
-        const [ error, asignaObservacionesDto ] = AsignaObservacionesDto.crear( req.body.formulario )
+        const [ error, asignaPrestamosDto ] = AsignaPrestamosDto.crear( req.body.formulario )
         if( error ) return res.status( 400 ).json( { error } )
 
-        this.observacionesServicio.setAsignaMovimientoCliente( asignaObservacionesDto! )
+        this.prestamosServicio.setAsignaMovimientoCliente( asignaPrestamosDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
 
-    cargaObservacionesId = ( req:Request, res:Response ) =>{
+    cargaPrestamosId = ( req:Request, res:Response ) =>{
 
-        this.observacionesServicio.cargaObservacionesId(req.body.id)
+        this.prestamosServicio.cargaPrestamosId(req.body.id)
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
 
-    setActualizaObservaciones = ( req:Request, res:Response ) =>{
+    setActualizaPrestamos = ( req:Request, res:Response ) =>{
         
-        const [ error, editaObservacionesDto ] = EditaObservacionesDto.crear( req.body.formulario )
+        const [ error, editaPrestamosDto ] = EditaPrestamosDto.crear( req.body.formulario )
         if( error ) return res.status( 400 ).json( { error } )
 
-        this.observacionesServicio.setActualizaObservaciones( editaObservacionesDto! )
+        this.prestamosServicio.setActualizaPrestamos( editaPrestamosDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
 
-    agregaObservaciones = ( req:Request, res:Response ) =>{
+    agregaPrestamos = ( req:Request, res:Response ) =>{
 
-        const [ error, agregarObservacionesDto ] = AgregaObservacionesDto.crear( req.body.formulario )
+        const [ error, agregarPrestamosDto ] = AgregaPrestamosDto.crear( req.body.formulario )
         if( error ) return res.status( 400 ).json( { error } )
 
-        this.observacionesServicio.agregaObservaciones( agregarObservacionesDto! )
+        this.prestamosServicio.agregaPrestamos( agregarPrestamosDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 

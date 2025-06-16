@@ -49,6 +49,8 @@ export class ProveedoresControlador {
 
     }
 
+
+
     cargaProveedorId = ( req:Request, res:Response ) =>{
 
         this.proveedoresServicio.cargaProveedorId(req.body.id)

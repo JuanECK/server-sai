@@ -14,6 +14,7 @@ export class ObservacionesRutas {
         router.get('/cargaCuentasLista', controlador.getCuentasListas)
         router.get('/cargaHistoricoObservaciones', controlador.getHistorico)
         router.post('/busqueda', controlador.getBusqueda)
+        router.post('/prestamo', controlador.prestamo)
         router.post('/eliminarRegistro', controlador.setEliminarObservaciones)
         router.post('/asigna', controlador.setAsignaMovimientoCliente)
         router.post('/cargaObservaciones', controlador.cargaObservacionesId)

@@ -55,8 +55,31 @@ export class FileUploadService {
 
 
     }
+    public async ActualizaDocumentoSinNombreMetodo2(files: UploadedFile[], folder: string = 'uploads', fileNames:any) {
+        try {
+            files.map((file, index) => {
+                if(files[index].name != '0SAF0_SAF0.pdf' ){
+                    // console.log({ActualizarArchivo:fileNames[index].fileName})
+                    this.uploadSingle2(file, folder, fileNames[index].fileName)
+                }
+    
+            })
+
+            return true
+            
+        } catch (error) {
+            console.log(error)
+            throw error
+        }
+
+
+
+    }
 
     async getNameFile( files: UploadedFile[], validExtensions: string[] = ['pdf']){
+
+        // console.log({Nombre:files})
+        // console.log({Nombre:files[0].name})
     
         const filesName = await Promise.all(
     
@@ -77,6 +100,44 @@ export class FileUploadService {
     
                     const fileName = `${this.uuid()}.${fileExtension}`
                     return { fileName }
+    
+            })
+    
+        )
+    
+        return filesName
+    
+    }
+    async getNameFileForma2( files: UploadedFile[], validExtensions: string[] = ['pdf']){
+
+        // let Arr = {fileName:'',fileName2:''}
+
+
+
+        const filesName = await Promise.all(
+    
+            files.map((file, index) => {
+    
+                const fileExtension = file.mimetype.split('/').at(1) ?? '';
+                    if (!validExtensions.includes(fileExtension)) {
+                        throw GeneraError.badRespuesta(`Extension invalida: ${fileExtension}, !!Solo se admiten estas extensiones: ${validExtensions}`)
+                        // throw new Error( `Extension invalida: ${ fileExtension}, !!Solo se admiten estas extensiones: ${validExtensions}` )
+                    }
+    
+                    if (file.size > 1 * 1024 * 1024) {
+    
+                        throw GeneraError.badRespuesta(`Tamaño de archivo excedido: ${CalculaMB.bytesToSize(file.size)}, !!Solo se admiten archivos de 1MB`)
+                        // throw GeneraError.badRespuesta( `Tamaño de archivo excedido: ${ file.size } bytes, !!Solo se admiten archivos de 1MB` )
+        
+                    }
+                    
+                    if(files[index].name != '0SAF0_SAF0.pdf' ){
+                        const fileName = `${this.uuid()}.${fileExtension}`
+                        return { fileName }
+                    }else{
+                        const fileName = ``
+                        return { fileName }
+                    }
     
             })
     
@@ -140,6 +201,22 @@ async uploadSingle(file: UploadedFile, index: number, folder: string = 'uploads'
     }
 
 
+    // public async ActualizaDocumentMetodo2(files: UploadedFile[], folder: string = 'uploads', validExtensions: string[] = ['pdf']) {
+
+    //     const filesName = await Promise.all(
+
+    //         files.map((file, index) => {
+    //             if(files[index].name != '0SAF0_SAF0.pdf' ){
+    //                 this.uploadSingle(file, index, folder, validExtensions)
+    //             }
+    //         })
+
+    //     )
+
+    //     return filesName
+    // }
+
+
     // public async updateDocument(files: UploadedFile[], folder: string = 'uploads', comprobantesNames:any, validExtensions: string[] = ['pdf']) {
 
     //     console.log(comprobantesNames)
@@ -163,11 +240,8 @@ async uploadSingle(file: UploadedFile, index: number, folder: string = 'uploads'
 
             const filePath = path.resolve( __dirname,`../../../${type}/${fileName[key]}`)
 
-            fs.unlink(filePath, (err)=>{
-
-                console.log(filePath)
-                
-            })
+            // console.log({BorrarArchivo:filePath})
+            fs.unlink(filePath, (err)=>{})
         }
         return true
     }

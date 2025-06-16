@@ -23,6 +23,15 @@ import { CuentasRutas } from './cuentas/rutas.cuentas';
 import { ObservacionesRutas } from './observaciones/rutas.observaciones';
 import { MovInvercionsRutas } from './movInvercion/rutas.movInvercion';
 import { MovProveedorRutas } from './movProveedor/rutas.movProveedor';
+import { MovOficinaRutas } from './movOficina/rutas.movOficina';
+import { MovInmobiliarioRutas } from './movInmobiliario/rutas.movInmobiliario';
+import { MovFacturaRutas } from './movFacturas/rutas.movIFacturas';
+import { MovPresupuestoRutas } from './movPresupuesto/rutas.movPresupuesto';
+import { PrestamosRutas } from './movPrestamos/rutas.observaciones';
+import { MovComisionesRutas } from './movComisiones/rutas.movComisiones';
+import { MovDivisasRutas } from './movDivisas/rutas.Divisas';
+import { FinanciamientoRutas } from './Financiemiento/rutas.Financiamiento';
+import { MovEliminadosRutas } from './movEliminados/rutas.movIFacturas';
 
 //---- Clase de las rutas
 export class AppRoutes {
@@ -39,6 +48,14 @@ export class AppRoutes {
 
     router.use('/movimientos/inversion', MovInvercionsRutas.routes);
     router.use('/movimientos/proveedor', MovProveedorRutas.routes);
+    router.use('/movimientos/Oficina', MovOficinaRutas.routes);
+    router.use('/movimientos/Inmobiliario', MovInmobiliarioRutas.routes);
+    router.use('/movimientos/Factura', MovFacturaRutas.routes);
+    router.use('/movimientos/Presupuesto', MovPresupuestoRutas.routes);
+    router.use('/movimientos/Prestamos', PrestamosRutas.routes);
+    router.use('/movimientos/Comisiones', MovComisionesRutas.routes);
+    router.use('/movimientos/Divisas', MovDivisasRutas.routes);
+    router.use('/movimientos/Eliminados', MovEliminadosRutas.routes);
 
     router.use('/clientes/Publico', PublicoRutas.routes);
     router.use('/clientes/comisionistas', ComisionistasRutas.routes);
@@ -47,6 +64,8 @@ export class AppRoutes {
 
     router.use('/cuentas', CuentasRutas.routes);
     
+    router.use('/Financiamiento', FinanciamientoRutas.routes);
+
     router.use('/observaciones', ObservacionesRutas.routes);
 
     router.use('/upload', FileUloadRoutes.routes)
