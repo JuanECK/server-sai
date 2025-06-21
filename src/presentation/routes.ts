@@ -32,6 +32,7 @@ import { MovComisionesRutas } from './movComisiones/rutas.movComisiones';
 import { MovDivisasRutas } from './movDivisas/rutas.Divisas';
 import { FinanciamientoRutas } from './Financiemiento/rutas.Financiamiento';
 import { MovEliminadosRutas } from './movEliminados/rutas.movIFacturas';
+import { ReportesRutas } from './Reportes/rutas.Reportes';
 
 //---- Clase de las rutas
 export class AppRoutes {
@@ -65,6 +66,8 @@ export class AppRoutes {
     router.use('/cuentas', CuentasRutas.routes);
     
     router.use('/Financiamiento', FinanciamientoRutas.routes);
+
+    router.use('/Reportes', ReportesRutas.routes);
 
     router.use('/observaciones', ObservacionesRutas.routes);
 
