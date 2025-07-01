@@ -1,6 +1,9 @@
 import { Response, Request } from "express";
 import { GeneraError } from "../../core";
 import { ReportesServicio } from "../services/reportes.service";
+import { ReporteIndividualDto } from "../../core/DTOS/reportes/reporte-individual.dto";
+import { ReporteGlobalDto } from "../../core/DTOS/reportes/reporte-Global.dto";
+import { ReporteGlobalCatalogoDto } from "../../core/DTOS/reportes/reporte-Global-Catalogo.dto";
 // import { AgregaReportesDto } from "../../core/DTOS/movReportes/agrega-Reportes.dto";
 // import { EditaReportesDto } from "../../core/DTOS/movReportes/edita-Reportes.dto";
 // import { ReportesServicio } from "../services/movReportes.service";
@@ -33,13 +36,40 @@ export class ReportesControlador {
 
     // }
 
-    // getBusqueda = ( req:Request, res:Response ) =>{
-    //     // console.log(req.body.criterio)
-    //     this.reportesServicio.getBusqueda( req.body.criterio )
-    //     .then(( municipio ) => res.json( municipio ))
-    //     .catch( error => this.manejadorErrores( error, res ) )
-    //     // res.json('exito')
-    // }
+    getReporteGlobal = ( req:Request, res:Response ) =>{
+        console.log(req.body.formulario)
+
+        const [ error, reporteGlobalDto ] = ReporteGlobalDto.crear( req.body.formulario )
+        if( error ) return res.status( 400 ).json( { error } )
+
+        this.reportesServicio.getReporteGlobal( reporteGlobalDto! )
+        .then(( respuestaFinal ) => res.json( respuestaFinal ))
+        .catch( error => this.manejadorErrores( error, res ) )
+        // res.json('exito')
+    }
+    getReporteGlobalCatalogo = ( req:Request, res:Response ) =>{
+        // console.log(req.body.criterio)
+        // console.log(req.body.formulario)
+
+        const [ error, reporteGlobalCatalogoDto ] = ReporteGlobalCatalogoDto.crear( req.body.formulario )
+        if( error ) return res.status( 400 ).json( { error } )
+
+        this.reportesServicio.getReporteGlobalCatalogo( reporteGlobalCatalogoDto! )
+        .then(( respuestaFinal ) => res.json( respuestaFinal ))
+        .catch( error => this.manejadorErrores( error, res ) )
+        // res.json('exito')
+    }
+    getReporteIndividual = ( req:Request, res:Response ) =>{
+        // console.log(req.body.criterio)
+
+        const [ error, reporteIndividualDto ] = ReporteIndividualDto.crear( req.body.formulario )
+        if( error ) return res.status( 400 ).json( { error } )
+
+        this.reportesServicio.getReporteIndividual( reporteIndividualDto! )
+        .then(( respuestaFinal ) => res.json( respuestaFinal ))
+        .catch( error => this.manejadorErrores( error, res ) )
+        // res.json('exito')
+    }
 
     // BusquedaAll = ( req:Request, res:Response ) =>{
     //     this.reportesServicio.BusquedaAll()
@@ -48,14 +78,12 @@ export class ReportesControlador {
     // }
 
     getCargaDataInicioIndividual = ( req:Request, res:Response ) =>{
-        console.log('Reportessss')
         this.reportesServicio.getCargaDataInicioIndividual()
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )
     }
 
     getCargaDataInicioGlobal = ( req:Request, res:Response ) =>{
-        console.log('Reportessss')
         this.reportesServicio.getCargaDataInicioGlobal()
         .then( ( response ) => res.json( response ) )
         .catch( error => this.manejadorErrores( error, res ) )

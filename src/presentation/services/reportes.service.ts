@@ -1,5 +1,8 @@
 
 import { GeneraError } from "../../core";
+import { ReporteGlobalCatalogoDto } from "../../core/DTOS/reportes/reporte-Global-Catalogo.dto";
+import { ReporteGlobalDto } from "../../core/DTOS/reportes/reporte-Global.dto";
+import { ReporteIndividualDto } from "../../core/DTOS/reportes/reporte-individual.dto";
 import { db } from "../../data/mysql/db/coneccion";
 import { FileUploadService } from "./file-upload.service";
 // import { AgregaReportesDto } from "../../core/DTOS/movReportes/agrega-Reportes.dto";
@@ -32,9 +35,11 @@ export class ReportesServicio {
  
             const array:Array<any>[] = []
             const Inversion = 'sp_carga_ModelosNegocio_reporteIndividual'
+            const Propiedad = 'sp_carga_propiedad'
             const listaInversion = await db.query(Inversion)
+            const listaPropiedad = await db.query(Propiedad)
 
-            array.push(listaInversion[0])
+            array.push(listaInversion[0], listaPropiedad[0])
 
             // const array:Array<any>[] = []
             // const reporte_c1 = 'sp_reporte_c1_ejemplo'
@@ -113,38 +118,168 @@ export class ReportesServicio {
         //     }
         // }
 
-    // public async getBusqueda( criterio:string ) {
-    //     try {
+    public async getReporteIndividual( reporteIndividualDto:ReporteIndividualDto ) {
+        try {
 
-    //         console.log(criterio)
+            // console.log(reporteIndividualDto)
 
-    //          let respuestaFinal
+             const array:Array<any>[] = []
 
-    //         if( criterio === '' ){
-    //             throw ('Sin criterio de busqueda');
-    //         }
+            const { fechaInicial, fechaFin, tipoReporte, usuario, Id_ICPC, Id_Modelo, check1, check2 } = reporteIndividualDto
+            const sqlE1 = 'sp_reporte_Encabezado1 :fechaInicial, :fechaFin, :tipoReporte, :usuario, :Id_ICPC, :Id_Modelo ';
+            const sqlE2 = 'sp_reporte_Encabezado2_Individual :Id_ICPC, :fechaInicial, :fechaFin, :Id_Modelo ';
+            const sqlRI = 'sp_reporte_individual :Id_ICPC, :Id_Modelo, :fechaInicial, :fechaFin, :check1, :check2 ';
 
-    //         console.log(criterio)
-    //         const sql = 'sp_busqueda_listado_clientes :parametro'
-    //         const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
+            const Encabezado1 = await db.query( sqlE1, { replacements:{ 
+                fechaInicial: fechaInicial, 
+                fechaFin: fechaFin, 
+                tipoReporte: tipoReporte, 
+                usuario: usuario, 
+                Id_ICPC: Id_ICPC, 
+                Id_Modelo: Id_Modelo, 
+             } } )
+
+            const Encabezado2 = await db.query( sqlE2, { replacements:{ 
+                Id_ICPC: Id_ICPC, 
+                fechaInicial: fechaInicial, 
+                fechaFin: fechaFin, 
+                Id_Modelo: Id_Modelo, 
+                check1: check1, 
+                check2: check2,
+             } } )
+
+            const ReporteI = await db.query( sqlRI, { replacements:{ 
+                Id_ICPC: Id_ICPC, 
+                Id_Modelo: Id_Modelo, 
+                fechaInicial: fechaInicial, 
+                fechaFin: fechaFin, 
+                check1: check1, 
+                check2: check2,
+             } } )
             
-    //         const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
-    //         console.log(respuesta)
+            // console.log(Encabezado1[0],Encabezado2[0],ReporteI[0])
 
-    //         if( respuesta[0].Resultado == 'Sindatos'){
-    //             respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
-    //         }else{
-    //             respuestaFinal = busqueda
-    //         }
+            array.push(
+                Encabezado1[0], 
+                Encabezado2[0], 
+                ReporteI[0]
+            )
+
+            // if( respuesta[0].Resultado == 'Sindatos'){
+            //     respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
+            // }else{
+            //     respuestaFinal = busqueda
+            // }
             
-    //         return respuestaFinal
+            return array
 
-    //     } catch (error) {
+        } catch (error) {
 
-    //         console.log(error);
-    //         throw GeneraError.noEncontrado(`${error}`)
-    //     }
-    // }
+            console.log(error);
+            throw GeneraError.noEncontrado(`${error}`)
+        }
+    }
+    public async getReporteGlobal( reporteGlobalDto:ReporteGlobalDto ) {
+        try {
+
+            
+             const array:Array<any>[] = []
+
+            const { fechaInicial, fechaFin, tipoReporte, usuario, Id_ICPC, Id_Modelo, check1, check2 } = reporteGlobalDto
+            const sqlE1 = 'sp_reporte_Encabezado1 :fechaInicial, :fechaFin, :tipoReporte, :usuario, :Id_ICPC, :Id_Modelo ';
+            const sqlE2 = 'sp_reporte_Encabezado2_Global :fechaInicial, :fechaFin, :Id_Modelo, :check1, :check2';
+            const sqlRG = 'sp_reporte_Global :Id_Modelo, :fechaInicial, :fechaFin, :check1, :check2 ';
+
+            const Encabezado1 = await db.query( sqlE1, { replacements:{ 
+                fechaInicial: fechaInicial, 
+                fechaFin: fechaFin, 
+                tipoReporte: tipoReporte, 
+                usuario: usuario, 
+                Id_ICPC: Id_ICPC, 
+                Id_Modelo: Id_Modelo, 
+             } } )
+
+            const Encabezado2 = await db.query( sqlE2, { replacements:{ 
+                fechaInicial: fechaInicial, 
+                fechaFin: fechaFin, 
+                Id_Modelo: Id_Modelo, 
+                check1: check1, 
+                check2: check2,
+             } } )
+
+            const ReporteG = await db.query( sqlRG, { replacements:{ 
+                Id_Modelo: Id_Modelo, 
+                fechaInicial: fechaInicial, 
+                fechaFin: fechaFin, 
+                check1: check1, 
+                check2: check2,
+             } } )
+            
+            // console.log(Encabezado1[0],Encabezado2[0],ReporteG[0])
+
+            array.push(
+                Encabezado1[0], 
+                Encabezado2[0], 
+                ReporteG[0]
+            )
+
+            // if( respuesta[0].Resultado == 'Sindatos'){
+            //     respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
+            // }else{
+            //     respuestaFinal = busqueda
+            // }
+            
+            return array
+
+        } catch (error) {
+
+            console.log(error);
+            throw GeneraError.noEncontrado(`${error}`)
+        }
+    }
+    public async getReporteGlobalCatalogo( reporteGlobalCatalogoDto:ReporteGlobalCatalogoDto ) {
+        try {
+
+            // console.log(reporteIndividualDto)
+
+             const array:Array<any>[] = []
+
+            const { fechaInicial, fechaFin, tipoReporte, usuario, Id_ICPC, Id_Modelo } = reporteGlobalCatalogoDto
+            const sqlE1 = 'sp_reporte_Encabezado1 :fechaInicial, :fechaFin, :tipoReporte, :usuario, :Id_ICPC, :Id_Modelo ';
+            const sqlRGC = 'sp_reporte_catalogoInversionista';
+
+            const Encabezado1 = await db.query( sqlE1, { replacements:{ 
+                fechaInicial: fechaInicial, 
+                fechaFin: fechaFin, 
+                tipoReporte: tipoReporte, 
+                usuario: usuario, 
+                Id_ICPC: Id_ICPC, 
+                Id_Modelo: Id_Modelo, 
+             } } )
+
+            const ReporteGC = await db.query( sqlRGC )
+            
+            // console.log(Encabezado1[0],ReporteGC[0])
+
+            array.push(
+                Encabezado1[0], 
+                ReporteGC[0]
+            )
+
+            // if( respuesta[0].Resultado == 'Sindatos'){
+            //     respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
+            // }else{
+            //     respuestaFinal = busqueda
+            // }
+            
+            return array
+
+        } catch (error) {
+
+            console.log(error);
+            throw GeneraError.noEncontrado(`${error}`)
+        }
+    }
 
     // public async cargaReportesId( id:string ) {
     //     try {
