@@ -52,6 +52,8 @@ export class MovComisionesServicio {
     public async getBusqueda( criterio:string ) {
         try {
 
+            let respData:any
+
             if( criterio === '' ){
                 throw ('Sin criterio de busqueda');
             }
@@ -63,11 +65,18 @@ export class MovComisionesServicio {
 
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
-            if( respuesta.length === 0){
-                throw ('No se Encontraron Coincidencias')
+            if( respuesta[0].Resultado == 'Sindatos'){
+                console.log(1)
+                respData = { status:'error', mensaje:'No se Encontraron Coincidencias' }
+                // throw ('No se Encontraron Coincidencias')
+            }else{
+                console.log(2)
+                respData = { status:200, data: respuesta }
             }
+
+            console.log(respuesta)
             
-            return busqueda
+            return respData
 
         } catch (error) {
 

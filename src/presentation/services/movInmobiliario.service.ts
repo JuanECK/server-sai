@@ -58,6 +58,7 @@ export class MovInmobiliarioServicio {
     public async getBusqueda( criterio:string ) {
         try {
 
+            let respData:any
             if( criterio === '' ){
                 throw ('Sin criterio de busqueda');
             }
@@ -69,11 +70,16 @@ export class MovInmobiliarioServicio {
 
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
-            if( respuesta.length === 0){
-                throw ('No se Encontraron Coincidencias')
+            if( respuesta[0].Resultado == 'Sindatos'){
+
+                respData = { status:'error', mensaje:'No se Encontraron Coincidencias' }
+                // throw ('No se Encontraron Coincidencias')
+            }else{
+
+                respData = { status:200, data: respuesta }
             }
             
-            return busqueda
+            return respData
 
         } catch (error) {
 

@@ -15,61 +15,6 @@ export class MovOficinaServicio {
         private readonly fileUploadService = new FileUploadService
     ) { }
 
-    // public async getEstado() {
-    //     try {
-
-    //         const sql = 'exec sp_carga_Estado';
-    //         const estado = await db.query(sql)
-
-    //         return estado;
-
-    //     } catch (error) {
-
-    //         console.log(error);
-    //         throw GeneraError.servidorInterno(`${error}`)
-
-    //     }
-    // }
-
-    // public async getMunicipio(estado: string) {
-    //     try {
-
-    //         const sql = 'exec sp_carga_Municipio :id_estado'
-    //         const municipio = await db.query(sql, { replacements: { id_estado: estado } })
-    //         return municipio;
-
-    //     }
-    //     catch (error) {
-    //         console.log(error)
-    //         throw GeneraError.servidorInterno(`${error}`)
-    //     }
-    // }
-    // public async getReferidoMovInvercion() {
-    //     try {
-
-    //         const sql = 'sp_carga_recomendado_MovInvercion'
-    //         const MovInvercion = await db.query(sql)
-    //         return MovInvercion;
-
-    //     }
-    //     catch (error) {
-    //         console.log(error)
-    //         throw GeneraError.servidorInterno(`${error}`)
-    //     }
-    // }
-    // public async getReferidoBRK() {
-    //     try {
-
-    //         const sql = 'sp_carga_recomendado_brk'
-    //         const BRK = await db.query(sql)
-    //         return BRK;
-
-    //     }
-    //     catch (error) {
-    //         console.log(error)
-    //         throw GeneraError.servidorInterno(`${error}`)
-    //     }
-    // }
 
     public async BusquedaAll() {
         try {
@@ -110,6 +55,7 @@ export class MovOficinaServicio {
     public async getBusqueda( criterio:string ) {
         try {
 
+            let respData:any
             if( criterio === '' ){
                 throw ('Sin criterio de busqueda');
             }
@@ -121,11 +67,16 @@ export class MovOficinaServicio {
 
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
-            if( respuesta.length === 0){
-                throw ('No se Encontraron Coincidencias')
+            if( respuesta[0].Resultado == 'Sindatos'){
+                console.log(1)
+                respData = { status:'error', mensaje:'No se Encontraron Coincidencias' }
+                // throw ('No se Encontraron Coincidencias')
+            }else{
+                console.log(2)
+                respData = { status:200, data: respuesta }
             }
             
-            return busqueda
+            return respData
 
         } catch (error) {
 

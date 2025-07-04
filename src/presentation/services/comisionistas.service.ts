@@ -87,6 +87,7 @@ export class ComisionistasServicio {
     public async getBusqueda( criterio:string ) {
         try {
 
+            let respuestaFinal
             if( criterio === '' ){
                 throw ('Sin criterio de busqueda');
             }
@@ -97,11 +98,14 @@ export class ComisionistasServicio {
 
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
-            if( respuesta.length === 0){
-                throw ('No se Encontraron Coincidencias')
+            if(respuesta[0].Resultado == 'Sindatos'){
+                respuestaFinal = { mensaje:'No se Encontraron Coincidencias', status:'error' }
+
+            }else{
+                respuestaFinal = busqueda
             }
             
-            return busqueda
+            return respuestaFinal
 
         } catch (error) {
 
