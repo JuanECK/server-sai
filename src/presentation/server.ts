@@ -43,7 +43,7 @@ export class Server {
 
     //---- Configuracion del uso de cors
     const corsOptions = {
-      origin: 'http://localhost:4200', // origen de la aplicacion
+      origin: ['http://localhost:4200'], // origen de la aplicacion
       credentials:true,  // credenciales en la cabecera
       optionsSuccessStatus: 200 // status de la respuesta
   }
