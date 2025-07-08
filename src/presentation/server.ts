@@ -46,7 +46,7 @@ export class Server {
       origin: ['http://localhost:4200'], // origen de la aplicacion
       credentials:true,  // credenciales en la cabecera
       optionsSuccessStatus: 200 // status de la respuesta
-  }
+    }
 
   //---- Configuracion de cors
   this.app.use(cors(corsOptions)); // para que se pueda acceder a la api desde el origen pactado con sus credenciales y opciones
