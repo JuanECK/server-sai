@@ -40,15 +40,11 @@ export class AutenticacionControlador {
             // console.log('cookie')
 
             const coockie = respCoockie?.split("; ").filter(c=>/^auth_access_token.+/.test(c))
-            // const coockie = respCoockie?.split("; ").filter(c=>/^x-auth-token.+/.test(c))
             .map(e=>e.split("="));
 
         if( respCoockie === undefined || coockie?.length === 0 ) return res.status(401).json({Response:'No autorizado'}) 
             
-            // console.log({respuesta:coockie?.length})
-
             const cookie = coockie?.at(0)
-            // console.log(cookie![1])
             this.autentucacionServicio.coockie( cookie![1] )
             .then( ( user ) => res.json( user ) )
             .catch( error => this.manejadorErrores( error, res ) )
@@ -114,6 +110,7 @@ export class AutenticacionControlador {
 
     GetModuloPerfil = async ( req:Request, res:Response ) => {
         const { id } = req.body
+        // console.log(id)
 
         this.autentucacionServicio.GetModuloPerfil( id )
         .then( ( result ) => {res.json( result )} )

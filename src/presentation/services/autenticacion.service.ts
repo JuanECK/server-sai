@@ -84,7 +84,7 @@ export class AutenticacionServicio {
 
     public async iniciarSession ( loginUsusarioDto:LoginUsusarioDto ) {
 
-        // console.log(loginUsusarioDto)
+        console.log(loginUsusarioDto)
 
         const{ Usuario, } = loginUsusarioDto
         
