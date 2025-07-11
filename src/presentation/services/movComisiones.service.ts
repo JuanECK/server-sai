@@ -189,6 +189,7 @@ export class MovComisionesServicio {
 
         try {
  
+            let respuestaApi:any
             console.log({Datos:agregarMovComisionesDto})
 
              const {  Id_ModeloNegocio, Id_ICPC, Id_CuentaB, Tipo_Movimiento, Monto, Observaciones, usuario, 
@@ -209,17 +210,23 @@ export class MovComisionesServicio {
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
-            console.log(response)
+            console.log({movComision: response})
 
             if (response.Respuesta != 'ok') {
+                if (response.Respuesta == 'no'){
+                respuestaApi = { mensaje: 'No hay saldo suficiente para justificar tu operacion' }
+                }else{
 
-                throw GeneraError.servidorInterno('Error interno del servidor');
-
+                    respuestaApi = { mensaje: 'Error interno del servidor' }
+                }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+                respuestaApi = { mensaje: 'El movimiento se ha registrado' }
             }
 
 
             // console.log(agregarMovInvercionDto)
-            return { mensaje: 'El movimiento se ha registrado' }
+            return respuestaApi
 
 
         } catch (error) {

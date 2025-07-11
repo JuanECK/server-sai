@@ -214,6 +214,8 @@ console.log(criterio)
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
 
+            console.log(response)
+
             if (response.Respuesta != 'ok') {
                   
                 throw GeneraError.servidorInterno('Error interno del servidor');

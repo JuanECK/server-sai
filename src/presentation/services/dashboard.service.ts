@@ -46,6 +46,8 @@ export class DashboardServicio {
         try {
 
             console.log( saldo, identificador, usuario)
+
+            let respuestaApi:any
             
             const data = this.parseCriptoID( usuario)
             if( !data.Id ) throw GeneraError.noAutorizado('ID incorrecto')
@@ -53,10 +55,25 @@ export class DashboardServicio {
             const sql = `exec sp_actualiza_saldo_inicial ${identificador}, ${saldo}, ${data.Id}`;
             const result = await db.query(sql)
             const { Respuesta } = JSON.parse(JSON.stringify(result[0][0])) 
+
             if( Respuesta === 0 ) throw GeneraError.badRespuesta('Error al actualizar saldo inicial')
             // console.log( result[0][0])
+            console.log(result[0][0])
 
-            return { Respuesta: 'OK'} 
+
+            if (Respuesta != 'ok') {
+                if (Respuesta == 'no'){
+                respuestaApi = { mensaje: 'No puedes realizar tu operacion' }
+                }else{
+
+                    respuestaApi = { mensaje: 'Error interno del servidor' }
+                }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+                respuestaApi = { Respuesta: 'OK'}
+            }
+
+            return  respuestaApi
 
         } catch (error) {
             console.log( error )

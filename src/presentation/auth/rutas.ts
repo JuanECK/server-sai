@@ -25,7 +25,7 @@ export class AutenticacionRutas {
         router.post('/modulo', controlador.GetModuloPerfil);
 
         router.post('/getModuloId', controlador.GetModuloId);
-        
+
         router.post('/credenciales', controlador.GetCredenciales)
 
 
