@@ -90,20 +90,27 @@ export class MovDivisasControlador {
         .catch( error => this.manejadorErrores( error, res ) )
 
     }
-
+    
     agregaMovDivisas = ( req:Request, res:Response ) =>{
         
         const objeto = Object.assign(req.body.formulario[0], req.body.formulario[1])
         // console.log(objeto)
-
+        
         const [ error, agregarMovDivisasDto ] = AgregarMovDivisasDto.crear( objeto )
         if( error ) return res.status( 400 ).json( { error } )
-
-        this.movProveedorServicio.agregaMovDivisas( agregarMovDivisasDto! )
-        .then( ( resultado ) => { res.json( resultado ) } )
-        .catch( error => this.manejadorErrores( error, res ) )
-
-    }
-
-
+            
+            this.movProveedorServicio.agregaMovDivisas( agregarMovDivisasDto! )
+            .then( ( resultado ) => { res.json( resultado ) } )
+            .catch( error => this.manejadorErrores( error, res ) )
+            
+        }
+        
+        getCargaConcepto = ( req:Request, res:Response ) =>{
+    
+            this.movProveedorServicio.getCargaConcepto( req.body.icpc )
+            .then( ( resultado ) => { res.json( resultado ) } )
+            .catch( error => this.manejadorErrores( error, res ) )
+    
+        }
+        
 }

@@ -20,6 +20,8 @@ export class MovDivisasRutas {
         router.post('/actualizaMovDivisas', controlador.setActualizaMovDivisas)
         router.post('/agregaMovDivisas', controlador.agregaMovDivisas)
         
+        router.post('/cargaConcepto', controlador.getCargaConcepto)
+
         return router;
     }
     

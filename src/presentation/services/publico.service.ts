@@ -15,10 +15,36 @@ export class PublicoServicio {
     public async BusquedaAll() {
         try {
 
+            const array: Array<any>[] = []
+            
             const sql = 'sp_carga_publico'
             const listaAll = await db.query(sql)
             
             return listaAll
+
+        } catch (error) {
+
+            console.log(error);
+            throw GeneraError.servidorInterno(`${error}`)
+        }
+    }
+
+    public async getDataInicial() {
+        try {
+
+            const array: Array<any>[] = []
+
+            const sql = 'sp_carga_tipo_clienteDivisa'
+            const clienteDivisa = await db.query(sql)
+
+            const Divisa = 'sp_carga_Divisa'
+            const listaDivisa = await db.query(Divisa)
+            // crear una copia y asignarla al principio del areglo
+            listaDivisa[0] = [{Id_Tipo_Divisa:0, Moneda:'Sin asignar'}, ...listaDivisa[0]] 
+
+            array.push( clienteDivisa[0], listaDivisa[0] )
+            
+            return array
 
         } catch (error) {
 
@@ -111,10 +137,10 @@ export class PublicoServicio {
             
             console.log({Datos:editaPublicoDto})
 
-            const {   nombre, fisica_moral, correo, telefono, Id_ICPC, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta, Estatus
+            const {   nombre, fisica_moral, correo, telefono, Id_ICPC, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta, Estatus, tipoClienteDivisa, tipoDivisa, saldoApertura
              } = editaPublicoDto
 
-            const sql =  'sp_actualiza_info_publico :nombre, :fisica_moral, :correo, :telefono, :Id_ICPC, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta, :Estatus'
+            const sql =  'sp_actualiza_info_publico :nombre, :fisica_moral, :correo, :telefono, :Id_ICPC, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta, :Estatus, :tipoClienteDivisa, :tipoDivisa, :saldoApertura'
 
             const registro = await db.query(sql, {
                 replacements: {
@@ -130,6 +156,9 @@ export class PublicoServicio {
                     Banco_tarjeta:Banco_tarjeta,
                     tarjeta:tarjeta,
                     Estatus:Estatus,
+                    tipoClienteDivisa: tipoClienteDivisa,
+                    tipoDivisa: tipoDivisa,
+                    saldoApertura: saldoApertura,
                 }
             })
 
@@ -148,16 +177,15 @@ export class PublicoServicio {
         }
     }
 
-
     public async agregaPublico( agregarProveedorDto: AgregaPublicoDto) {
         try {
 
             console.log({Datos:agregarProveedorDto})
 
-            const {  nombre, fisica_moral, correo, telefono, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta,
+            const {  nombre, fisica_moral, correo, telefono, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta, tipoClienteDivisa, tipoDivisa, saldoApertura,
              } = agregarProveedorDto
 
-            const sql =  'sp_inserta_publico   :nombre, :fisica_moral, :correo, :telefono, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta'
+            const sql =  'sp_inserta_publico   :nombre, :fisica_moral, :correo, :telefono, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta, :tipoClienteDivisa, :tipoDivisa, :saldoApertura'
              
 
             const registro = await db.query(sql, {
@@ -172,6 +200,9 @@ export class PublicoServicio {
                     FINCASH:FINCASH,
                     Banco_tarjeta:Banco_tarjeta,
                     tarjeta:tarjeta,
+                    tipoClienteDivisa: tipoClienteDivisa,
+                    tipoDivisa: tipoDivisa,
+                    saldoApertura: saldoApertura,
                 }
             })
 

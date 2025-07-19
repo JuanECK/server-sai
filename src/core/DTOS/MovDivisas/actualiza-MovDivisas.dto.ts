@@ -12,7 +12,7 @@ export class ActualizaMovDivisasDto {
         public estatus: string,
         public Tipo_Movimiento: string,
         public Monto: string,
-        public Tipo_Cuenta: string,
+
 
     ) { }
 
@@ -29,7 +29,7 @@ export class ActualizaMovDivisasDto {
             estatus,
             Tipo_Movimiento,
             Monto,
-            Tipo_Cuenta,
+
         } = objeto;
 
             if(!Concepto) return ['Falta el Concepto']
@@ -48,7 +48,7 @@ export class ActualizaMovDivisasDto {
             estatus,
             Tipo_Movimiento,
             Monto,
-            Tipo_Cuenta,
+
         )]
     }
 }

@@ -12,7 +12,7 @@ export class AgregarMovDivisasDto {
         public estatus: string,
         public Tipo_Movimiento: string,
         public Monto: string,
-        public Tipo_Cuenta: string,
+        // public Tipo_Cuenta: string,
 
     ) { }
 
@@ -29,7 +29,7 @@ export class AgregarMovDivisasDto {
             estatus,
             Tipo_Movimiento,
             Monto,
-            Tipo_Cuenta,
+            // Tipo_Cuenta,
         } = objeto;
 
             if(!Concepto) return ['Falta el Concepto']
@@ -49,7 +49,7 @@ export class AgregarMovDivisasDto {
             estatus,
             Tipo_Movimiento,
             Monto,
-            Tipo_Cuenta,
+            // Tipo_Cuenta,
         )]
     }
 }

@@ -17,6 +17,9 @@ export class AgregaPublicoDto {
         public Banco_tarjeta: string,
         public tarjeta: string,
         // public Estatus: string,
+        public tipoClienteDivisa : string,
+        public tipoDivisa : string,
+        public saldoApertura : string,
 
     ) { }
 
@@ -34,6 +37,9 @@ export class AgregaPublicoDto {
             FINCASH,
             Banco_tarjeta,
             tarjeta,
+            tipoClienteDivisa,
+            tipoDivisa,
+            saldoApertura,
             // Id_ICPC,
             // Estatus,
 
@@ -55,6 +61,9 @@ export class AgregaPublicoDto {
             FINCASH,
             Banco_tarjeta,
             tarjeta,
+            tipoClienteDivisa,
+            tipoDivisa,
+            saldoApertura,
             // Estatus,
         )]
     }

@@ -64,6 +64,7 @@ export class MovComisionesServicio {
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+            // console.log(respuesta)
 
             if( respuesta[0].Resultado == 'Sindatos'){
                 console.log(1)
@@ -71,7 +72,7 @@ export class MovComisionesServicio {
                 // throw ('No se Encontraron Coincidencias')
             }else{
                 console.log(2)
-                respData = { status:200, data: respuesta }
+                respData = {data: busqueda }
             }
 
             console.log(respuesta)
@@ -168,6 +169,7 @@ export class MovComisionesServicio {
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+            console.log(response)
 
             if (response.Respuesta != 'ok') {
                 throw GeneraError.servidorInterno('Error interno del servidor');

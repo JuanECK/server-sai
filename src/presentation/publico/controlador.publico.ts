@@ -35,6 +35,14 @@ export class PublicoControlador {
 
     }
 
+    getDataInicial = ( req:Request, res:Response ) =>{
+
+        this.publicoServicio.getDataInicial()
+        .then(( data ) => res.json( data ))
+        .catch( error => this.manejadorErrores( error, res ) )
+
+    }
+
     BusquedaAll = ( req:Request, res:Response ) =>{
         this.publicoServicio.BusquedaAll()
         .then( ( response ) => res.json( response ) )

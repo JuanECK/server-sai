@@ -17,6 +17,9 @@ export class EditaPublicoDto {
         public Banco_tarjeta: string,
         public tarjeta: string,
         public Estatus: string,
+        public tipoClienteDivisa : string,
+        public tipoDivisa : string,
+        public saldoApertura : string,
 
     ) { }
 
@@ -36,6 +39,9 @@ export class EditaPublicoDto {
             Banco_tarjeta,
             tarjeta,
             Estatus,
+            tipoClienteDivisa,
+            tipoDivisa,
+            saldoApertura,
 
         } = objeto;
             if(!nombre) return ['Falta  Nombre o Razón social']
@@ -56,6 +62,9 @@ export class EditaPublicoDto {
             Banco_tarjeta,
             tarjeta,
             Estatus,
+            tipoClienteDivisa,
+            tipoDivisa,
+            saldoApertura,
         )]
     }
 }

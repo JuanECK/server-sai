@@ -11,6 +11,7 @@ export class PublicoRutas {
         const controlador = new PublicoControlador( proveedoresServicio );
 
         router.get('/busquedaAll', controlador.BusquedaAll)
+        router.get('/dataInicial', controlador.getDataInicial)
         router.post('/busqueda', controlador.getBusqueda)
         router.post('/eliminarRegistro', controlador.setEliminarPublico)
         router.post('/cargaPublico', controlador.cargaPublicoId)
