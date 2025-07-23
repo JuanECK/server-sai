@@ -40,6 +40,13 @@ export class MovInmobiliarioControlador {
         .catch( error => this.manejadorErrores( error, res ) )
     }
 
+    getConcepto = ( req:Request, res:Response ) =>{
+
+        this.movProveedorServicio.getConcepto( req.body.concepto )
+        .then( ( response ) => res.json( response ) )
+        .catch( error => this.manejadorErrores( error, res ) )
+    }
+
     getBusqueda = ( req:Request, res:Response ) =>{
 
         // console.log(req.body.criterio)

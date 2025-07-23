@@ -371,12 +371,8 @@ export class FinanciamientoServicio {
             const uploadDoc = await this.fileUploadService.ActualizaDocumentoSinNombreMetodo2(files, folder, fileNames)
             if (!uploadDoc) throw GeneraError.servidorInterno('Error al intentar almacenar el documento PDF')
 
-            // const uploadDoc = await this.fileUploadService.ActualizaDocumentMetodo2(files, folder)
-            // if (!uploadDoc) throw GeneraError.servidorInterno('Error inesperado del servidor')
-
-            // // console.log(agregarMovInvercionDto)
             return { mensaje: 'El movimiento se ha almacenado' }
-            // throw GeneraError.servidorInterno(`error`)
+
 
         } catch (error) {
 

@@ -16,6 +16,7 @@ export class MovInmobiliarioRutas {
         router.get('/busquedaAll', controlador.BusquedaAll)
         router.get('/cargaDataInicio', controlador.getDataInicio)
         router.get('/cargaHistoricoInmobiliario', controlador.getHistorico)
+        router.post('/cargaConcepto', controlador.getConcepto)
         router.post('/busqueda', controlador.getBusqueda)
         router.post('/eliminarRegistro', controlador.setEliminarRegistro)
         router.post('/cargaMovInmobiliario', controlador.cargaMovInmobiliarioId)

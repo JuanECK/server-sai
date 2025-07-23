@@ -38,15 +38,30 @@ export class MovInmobiliarioServicio {
             const array:Array<any>[] = []
             
             const propiedad = 'sp_carga_propiedad'
-            const concepto = 'sp_carga_concepto_inmobi'
+            // const concepto = 'sp_carga_concepto_inmobi :tipoMovimiento'
             const cuentas = 'sp_carga_cuentas_inmobi'
             const listaproveedor = await db.query(propiedad)
-            const listaconcepto = await db.query(concepto)
+            // const listaconcepto = await db.query(concepto, { replacements:{tipoMovimiento:'Ingreso'}})
             const listacuentas = await db.query(cuentas)
 
-            array.push(listaproveedor[0],listaconcepto[0],listacuentas[0])
+            array.push(listaproveedor[0],listacuentas[0])
             
             return array
+
+        } catch (error) {
+
+            console.log(error);
+            throw GeneraError.servidorInterno(`${error}`)
+        }
+    }
+    public async getConcepto( concepto:string ) {
+        try {
+
+            const conceptoSQL = 'sp_carga_concepto_inmobi :tipoMovimiento'
+
+            const listaconcepto = await db.query(conceptoSQL, { replacements:{tipoMovimiento:concepto}})
+          
+            return listaconcepto
 
         } catch (error) {
 
@@ -226,15 +241,25 @@ export class MovInmobiliarioServicio {
         try {
 
             // console.log({Files:comFiles})
+            let respData:any
+
+            let fileNames
             
             if(comFiles){
-                console.log('hay comprobante :)')
-                const uploadDoc = await this.fileUploadService.ActualizaDocument(files, folder)
-                if (!uploadDoc) throw GeneraError.servidorInterno('Error inesperado del servidor')
-                    
-                    agregarMovInmobiliarioDto.Comprobante = uploadDoc[0].fileName
-                    
+
+                fileNames = await this.fileUploadService.getNameFileForma2( files )
+                console.log({Nombres:fileNames})
+                if(fileNames[0]){
+                    agregarMovInmobiliarioDto.Comprobante = fileNames[0].fileName
                 }
+
+                // console.log('hay comprobante :)')
+                // const uploadDoc = await this.fileUploadService.ActualizaDocument(files, folder)
+                // if (!uploadDoc) throw GeneraError.servidorInterno('Error inesperado del servidor')
+                    
+                // agregarMovInmobiliarioDto.Comprobante = uploadDoc[0].fileName
+                    
+            }
                 
             console.log({Datos:agregarMovInmobiliarioDto})
 
@@ -261,17 +286,26 @@ export class MovInmobiliarioServicio {
 
             if (response.Respuesta != 'ok') {
 
+                if ( response.Respuesta == 'no'){
+
+                   return respData = { status:'error', mensaje:'No hay suficiente saldo en la cuenta para la operación' }
+
+                }
+
+                throw GeneraError.servidorInterno('Error interno del servidor');
+
                 // const Arr = { fileName: uploadDoc[0].fileName, fileName2: uploadDoc[1].fileName }
  
                     // this.fileUploadService.deleteFile(Arr, folder)
                   
-                throw GeneraError.servidorInterno('Error interno del servidor');
-
             }
 
-
+            if(comFiles){
+            const uploadDoc = await this.fileUploadService.ActualizaDocumentoSinNombreMetodo2(files, folder, fileNames)
+            if (!uploadDoc) throw GeneraError.servidorInterno('Error al intentar almacenar el documento PDF')
+            }
             // console.log(agregarMovInvercionDto)
-            return { mensaje: 'El movimiento se ha almacenado' }
+            return { status:200, mensaje: 'El movimiento se ha almacenado' }
 
 
         } catch (error) {
