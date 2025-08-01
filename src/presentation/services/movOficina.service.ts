@@ -37,7 +37,8 @@ export class MovOficinaServicio {
             const array:Array<any>[] = []
             
             const concepto = 'sp_carga_concepto_oficina'
-            const cuentas = 'sp_carga_cuenta_oficina'
+            const cuentas = 'sp_carga_cuentas_presupuesto_list'
+            // const cuentas = 'sp_carga_cuenta_oficina'
             const listaconcepto = await db.query(concepto)
             const listacuentas = await db.query(cuentas)
 
@@ -65,7 +66,7 @@ export class MovOficinaServicio {
             const sql = 'sp_busqueda_movOficina :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
-            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+            const respuesta = JSON.parse(JSON.stringify(busqueda))
 
             if( respuesta[0].Resultado == 'Sindatos'){
                 console.log(1)
@@ -90,7 +91,7 @@ export class MovOficinaServicio {
 
             const sql = 'sp_historico_movOficina'
             const listaAll = await db.query(sql)
-            console.log(listaAll)
+            console.log({historico:listaAll})
             
             return listaAll
 

@@ -217,6 +217,9 @@ console.log(criterio)
             console.log(response)
 
             if (response.Respuesta != 'ok') {
+                // if (){
+                //     La cuenta con esta CLABE ya existe
+                // }
                   
                 throw GeneraError.servidorInterno('Error interno del servidor');
             }

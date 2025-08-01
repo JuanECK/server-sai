@@ -162,7 +162,7 @@ export class ObservacionesServicio {
     public async setAsignaMovimientoCliente( asignaObservacionesDto:AsignaObservacionesDto ) {
         try {
 
-            // console.log( {'ver valores':valores} )
+            console.log( {'ver valores':asignaObservacionesDto} )
 
             let respuestaFinal
             const { 

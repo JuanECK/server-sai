@@ -83,7 +83,7 @@ export class MovInmobiliarioServicio {
             const sql = 'sp_busqueda_movInmobiliario :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
-            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+            const respuesta = JSON.parse(JSON.stringify(busqueda))
 
             if( respuesta[0].Resultado == 'Sindatos'){
 
@@ -163,35 +163,37 @@ export class MovInmobiliarioServicio {
 
         try {
 
-            console.log({Comprobante:actualizaMovInmobiliarioDto.Comprobante})
-            if( actualizaMovInmobiliarioDto.Comprobante == '' ){
-                const { NameComprobante } = comprobantesNames
-                let Arr = {fileName:''}
-                Arr.fileName = NameComprobante
+            let accion = { elimina:false, actualiza:false }
+            let fileNames
+            let Arr = {fileName:''}
+            const { NameComprobante, eliminadoComprobante } = comprobantesNames
 
-                if( files[0] == undefined ){
-                    console.log('borra - ' , comprobantesNames)
-                    await this.fileUploadService.deleteFile(Arr, folder)
-
-                }else{
-                    
-                    if(files[0] != undefined){
-                        console.log('actualize - ' , comprobantesNames)
-                        
-                        await this.fileUploadService.deleteFile(Arr, folder)
-                        
-                        const uploadDoc = await this.fileUploadService.ActualizaDocument(files, folder)
-                        if (!uploadDoc) throw GeneraError.servidorInterno('Error inesperado del servidor')
             
-                        console.log({uploadDoc:uploadDoc})
-
-                            actualizaMovInmobiliarioDto.Comprobante = uploadDoc[0].fileName
-
-                    }
-        
+            
+            if( NameComprobante == '' &&  eliminadoComprobante == '' && files[0].name != '0SAF0_SAF0.pdf'){
+                    fileNames = await this.fileUploadService.getNameFileForma2( files )
+                    actualizaMovInmobiliarioDto.Comprobante = fileNames[0].fileName
+                    accion.actualiza = true;
                 }
-            
-            }
+                
+                if( NameComprobante == '' &&  eliminadoComprobante != '' && files[0].name == '0SAF0_SAF0.pdf'){
+                    console.log('Eliminaste el comporbante')
+                    Arr.fileName= eliminadoComprobante
+                    accion.elimina = true
+                }
+                
+                if( NameComprobante == '' &&  eliminadoComprobante != '' && files[0].name != '0SAF0_SAF0.pdf'){
+                    console.log('actualizaste el comporobante')
+                    fileNames = await this.fileUploadService.getNameFileForma2( files )
+                    actualizaMovInmobiliarioDto.Comprobante = fileNames[0].fileName
+
+                    Arr.fileName= eliminadoComprobante;
+                    accion.elimina = true;
+                    accion.actualiza = true;
+
+                }
+
+
 
             console.log({agregarMovInvercionDto:actualizaMovInmobiliarioDto})
         
@@ -221,9 +223,23 @@ export class MovInmobiliarioServicio {
                 throw GeneraError.servidorInterno('Error interno del servidor');
             }
 
+            if(accion.actualiza){
+               const uploadDoc = await this.fileUploadService.ActualizaDocumentoSinNombreMetodo2(files, folder, fileNames)
+               if (!uploadDoc) throw GeneraError.servidorInterno('Error al intentar almacenar el documento PDF')
+           }
+
+             if(accion.elimina){
+                await this.fileUploadService.deleteFile(Arr, folder)
+            }
+
+             if(accion.elimina && accion.actualiza){
+                await this.fileUploadService.deleteFile(Arr, folder)
+                const uploadDoc = await this.fileUploadService.ActualizaDocumentoSinNombreMetodo2(files, folder, fileNames)
+                if (!uploadDoc) throw GeneraError.servidorInterno('Error al intentar almacenar el documento PDF')
+            }
+
             return { mensaje: 'Edición exitosa' }
 
-            throw GeneraError.servidorInterno(`error`)
 
         } catch (error) {
             console.log(error)

@@ -18,7 +18,6 @@ export class MovProveedorServicio {
     public async BusquedaAll() {
         try {
 
-            
             const sql = 'sp_carga_conceptoInversion_Ingreso'
             const listaAll = await db.query(sql)
             
@@ -37,7 +36,7 @@ export class MovProveedorServicio {
             
             const proveedor = 'sp_carga_proveedor_list'
             const concepto = 'sp_carga_concepto_proveedor_list'
-            const cuentas = 'sp_carga_cuentas_proveedor_list'
+            const cuentas = 'sp_carga_cuentas_presupuesto_list'
             const listaproveedor = await db.query(proveedor)
             const listaconcepto = await db.query(concepto)
             const listacuentas = await db.query(cuentas)
@@ -66,7 +65,7 @@ export class MovProveedorServicio {
             const sql = 'sp_busqueda_movProvedores :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
-            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+            const respuesta = JSON.parse(JSON.stringify(busqueda))
 
             if( respuesta[0].Resultado == 'Sindatos'){
 

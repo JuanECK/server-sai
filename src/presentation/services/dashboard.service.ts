@@ -19,6 +19,8 @@ export class DashboardServicio {
             const SC = 'exec sp_saldo_cuentas_dash'
             const CDS = 'exec sp_carga_diferencia_saldos_dash'
             const CDG = 'exec sp_carga_diferencia_global_dash'
+            const CSCC = 'sp_carga_saldo_cuentaConcentradora'
+
 
             const prestamos = await db.query(PI)
             const adeudos = await db.query(AE)
@@ -26,8 +28,9 @@ export class DashboardServicio {
             const cuentas = await db.query(SC)
             const saldos = await db.query(CDS)
             const diferencia = await db.query(CDG)
+            const cuentaConcentradora = await db.query(CSCC)
 
-            array.push(prestamos[0],adeudos[0],abonos[0],cuentas[0],saldos[0],diferencia[0])
+            array.push(prestamos[0],adeudos[0],abonos[0],cuentas[0],saldos[0],diferencia[0],cuentaConcentradora[0])
             // array.push([{prestamoInterno:prestamos[0]},{adeudoEurope:adeudos[0]},{saldoCuentas:cuentas[0]},{DiferenciaSaldos:saldos[0]}])
             // console.log(array)
 

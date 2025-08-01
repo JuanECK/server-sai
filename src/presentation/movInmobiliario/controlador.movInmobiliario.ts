@@ -74,21 +74,24 @@ export class MovInmobiliarioControlador {
     setActualizaMovInmobiliario = ( req:Request, res:Response ) =>{
 
         // console.log( ' actualizacion 1 ', req.body)
+        console.log({BODYY:req.body})
 
         const type = req.params.type;
         const files = req.body.files as UploadedFile[]
-        const comprobantesNames = {NameComprobante:req.body.comprobanteCambio} 
-        // console.log(comprobantesNames)
+        const comprobantesNames = {NameComprobante:req.body.comprobanteCambio, eliminadoComprobante:req.body.eliminadoComp} 
 
+        // const comprobantesNames = {NameComprobante:req.body.comprobanteCambio} 
+        // console.log(comprobantesNames)
+        // console.log(files)
         
         const [ error, actualizaMovInmobiliarioDto ] = ActualizaMovInmobiliarioDto.crear( req.body )
         if( error ) return res.status( 400 ).json( { error } )
-
-
+            
         this.movProveedorServicio.setActualizaMovInmobiliario( files, comprobantesNames, `uploads/${ type }`, actualizaMovInmobiliarioDto! )
         .then( ( resultado ) => { res.json( resultado ) } )
         .catch( error => this.manejadorErrores( error, res ) )
 
+        
     }
 
     setEliminarRegistro = ( req:Request, res:Response ) =>{

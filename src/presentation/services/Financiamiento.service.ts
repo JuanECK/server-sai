@@ -106,22 +106,28 @@ export class FinanciamientoServicio {
     public async getBusqueda( criterio:string ) {
         try {
 
+            let respData:any
             if( criterio === '' ){
                 throw ('Sin criterio de busqueda');
             }
 
 
             console.log(criterio)
-            const sql = 'sp_busqueda_movProvedores :parametro'
+            const sql = 'sp_busqueda_movFinanciamiento :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+console.log(respuesta)
+            if( respuesta[0].Resultado == 'Sindatos'){
 
-            if( respuesta.length === 0){
-                throw ('No se Encontraron Coincidencias')
+                respData = { status:'error', mensaje:'No se Encontraron Coincidencias' }
+                // throw ('No se Encontraron Coincidencias')
+            }else{
+
+                respData = { status:200, data: busqueda }
             }
             
-            return busqueda
+            return respData
 
         } catch (error) {
 
@@ -159,28 +165,28 @@ export class FinanciamientoServicio {
         }
     }
 
-        public async prestamo( Id:string ) {
-            try {
+    public async prestamo( Id:string ) {
+        try {
 
-                const sql = 'sp_cambia_pagado_movFinanciamiento :Id_Mov_Fin, :pagado '
-                
-                const registro = await db.query( sql, { replacements:{ Id_Mov_Fin:Id, pagado:1 } } )
-                
-                const response = JSON.parse(JSON.stringify(registro[0][0]))
-                
-                console.log( {response:response} )
-                if (response.Resultado != 'ok') {
-                    throw GeneraError.servidorInterno('Error interno del servidor');
-                }
-
-                return { mensaje: 'El pago se ha registrado' }
-
-            } catch (error) {
-
-                console.log(error);
-                throw GeneraError.servidorInterno(`${error}`)
+            const sql = 'sp_cambia_pagado_movFinanciamiento :Id_Mov_Fin, :pagado '
+            
+            const registro = await db.query( sql, { replacements:{ Id_Mov_Fin:Id, pagado:1 } } )
+            
+            const response = JSON.parse(JSON.stringify(registro[0][0]))
+            
+            console.log( {response:response} )
+            if (response.Resultado != 'ok') {
+                throw GeneraError.servidorInterno('Error interno del servidor');
             }
+
+            return { mensaje: 'El pago se ha registrado' }
+
+        } catch (error) {
+
+            console.log(error);
+            throw GeneraError.servidorInterno(`${error}`)
         }
+    }
 
     public async setEliminarRegistro( valores:any ) {
         try {
@@ -305,7 +311,6 @@ export class FinanciamientoServicio {
                 // console.log({Arr:Arr})
                 await this.fileUploadService.deleteFile(Arr, folder)
             }
-
         
             const uploadDoc = await this.fileUploadService.ActualizaDocumentoSinNombreMetodo2(files, folder, fileNames)
             if (!uploadDoc) throw GeneraError.servidorInterno('Error al intentar almacenar el documento PDF')

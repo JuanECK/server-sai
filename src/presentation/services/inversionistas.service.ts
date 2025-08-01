@@ -98,7 +98,7 @@ export class InversionistasServicio {
 
             data[0].BRK = data[0].BRK.replace(/\D/g, "")
 
-            // console.log(data)
+            console.log({inversionista:data})
 
             for (let i = Object.keys(data[0]).length - 1; i >= 27; i--) {
                 let dato = Object.keys(data[0])[i];

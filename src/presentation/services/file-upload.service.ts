@@ -56,6 +56,7 @@ export class FileUploadService {
 
     }
     public async ActualizaDocumentoSinNombreMetodo2(files: UploadedFile[], folder: string = 'uploads', fileNames:any) {
+        // console.log({files33333:files})
         try {
             files.map((file, index) => {
                 if(files[index].name != '0SAF0_SAF0.pdf' ){
@@ -75,6 +76,28 @@ export class FileUploadService {
 
 
     }
+    // public async ActualizaDocumentoSimpleMetodo2(files: UploadedFile[], folder: string = 'uploads', fileNames:any) {
+    //     try {
+    //         files.map((file, index) => {
+                
+    //             if(files[index].name != '0SAF0_SAF0.pdf' ){
+    //                 console.log({files33333:file})
+    //                 // console.log({ActualizarArchivo:fileNames[index].fileName})
+    //                 this.uploadSingle2(file, folder, fileNames[index].fileName)
+    //             }
+    
+    //         })
+
+    //         return true
+            
+    //     } catch (error) {
+    //         console.log(error)
+    //         throw error
+    //     }
+
+
+
+    // }
 
     async getNameFile( files: UploadedFile[], validExtensions: string[] = ['pdf']){
 
@@ -112,7 +135,7 @@ export class FileUploadService {
 
         // let Arr = {fileName:'',fileName2:''}
 
-
+// console.log({files555:files})
 
         const filesName = await Promise.all(
     

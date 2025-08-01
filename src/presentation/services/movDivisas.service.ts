@@ -127,6 +127,7 @@ export class MovDivisasServicio {
 
             const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
+            
              if( respuesta[0].Resultado == 'Sindatos'){
 
                 respData = { status:'error', mensaje:'No se Encontraron Coincidencias' }

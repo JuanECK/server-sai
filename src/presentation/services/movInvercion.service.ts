@@ -113,7 +113,7 @@ export class MovInvercionsServicio {
             const sql = 'sp_busqueda_movInversiones :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
-            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+            const respuesta = JSON.parse(JSON.stringify(busqueda))
 
             if( respuesta[0].Resultado == 'Sindatos'){
                 respData = { status:'error', mensaje:'No se Encontraron Coincidencias' }
@@ -251,7 +251,6 @@ export class MovInvercionsServicio {
                 if(files[0] != undefined){
                     console.log('actualize - ' , comprobantesNames)
                     
-        
                     await this.fileUploadService.deleteFile(Arr, folder)
                     
                     const uploadDoc = await this.fileUploadService.ActualizaDocument(files, folder)
@@ -420,6 +419,7 @@ export class MovInvercionsServicio {
 
         try {
 
+            let respuestaFinal;
             console.log({Datos:agregarMovInvercionDto})
 
             const { Id_ICPC, Tipo_Movimiento, Id_CuentaB, Monto, Concepto, Observaciones, Comprobante, usuario
@@ -441,14 +441,20 @@ export class MovInvercionsServicio {
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+             console.log(response)
 
             if (response.Respuesta != 'ok') {
+
+                if( response.Respuesta == 'no' ){
+
+                    return { error:'No hay saldo suficiente en la cuenta', status:'error' }
+                }
                   
-                throw GeneraError.servidorInterno('Error interno del servidor');
+               return { error:'Error interno del servidor', status:'error' }
 
             }
 
-            return { mensaje: 'El movimiento se ha almacenado' }
+            return { mensaje:'El movimiento se ha almacenado', status:200 }
 
 
         } catch (error) {
