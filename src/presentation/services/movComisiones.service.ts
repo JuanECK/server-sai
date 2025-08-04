@@ -32,15 +32,32 @@ export class MovComisionesServicio {
             const array:Array<any>[] = []
             
             const modeloNegocio = 'sp_carga_modeloNegocio_comision'
-            const comisionista = 'sp_carga_comisionista_comision'
+            const comisionista = 'sp_carga_comisionista_comision :tipoMovimineto'
             const cuentas = 'sp_carga_cuentas_comision_list'
             const listaNegocio = await db.query(modeloNegocio)
-            const listacomisionista = await db.query(comisionista)
+            const listacomisionista = await db.query(comisionista, {replacements:{ tipoMovimineto:'I' }})
             const listacuentas = await db.query(cuentas)
 
             array.push(listaNegocio[0],listacomisionista[0],listacuentas[0])
             
             return array
+
+        } catch (error) {
+
+            console.log(error);
+            throw GeneraError.servidorInterno(`${error}`)
+        }
+    }
+
+        public async getComisionistaComision(comisionista:string) {
+            console.log(comisionista)
+        try {
+            
+            const comisionistas = 'sp_carga_comisionista_comision :tipoMovimineto'
+            const listacomisionista = await db.query(comisionistas, {replacements:{ tipoMovimineto:comisionista }})
+            console.log(listacomisionista)
+            
+            return listacomisionista
 
         } catch (error) {
 

@@ -35,6 +35,12 @@ export class MovComisionesControlador {
         .catch( error => this.manejadorErrores( error, res ) )
     }
 
+    getComisionistaComision = ( req:Request, res:Response ) =>{
+        this.movProveedorServicio.getComisionistaComision( req.body.comisionista )
+        .then( ( response ) => res.json( response ) )
+        .catch( error => this.manejadorErrores( error, res ) )
+    }
+
     getBusqueda = ( req:Request, res:Response ) =>{
 
         // console.log(req.body.criterio)
