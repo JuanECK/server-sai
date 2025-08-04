@@ -66,7 +66,7 @@ export class MovOficinaServicio {
             const sql = 'sp_busqueda_movOficina :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
-            const respuesta = JSON.parse(JSON.stringify(busqueda))
+            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
             if( respuesta[0].Resultado == 'Sindatos'){
                 console.log(1)

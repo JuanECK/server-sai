@@ -113,7 +113,7 @@ export class MovInvercionsServicio {
             const sql = 'sp_busqueda_movInversiones :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
-            const respuesta = JSON.parse(JSON.stringify(busqueda))
+            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
 
             if( respuesta[0].Resultado == 'Sindatos'){
                 respData = { status:'error', mensaje:'No se Encontraron Coincidencias' }

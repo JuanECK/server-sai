@@ -83,7 +83,8 @@ export class MovInmobiliarioServicio {
             const sql = 'sp_busqueda_movInmobiliario :parametro'
             const busqueda = await db.query( sql, { replacements:{ parametro:criterio } } )
 
-            const respuesta = JSON.parse(JSON.stringify(busqueda))
+            const respuesta = JSON.parse(JSON.stringify(busqueda[0]))
+            console.log(respuesta)
 
             if( respuesta[0].Resultado == 'Sindatos'){
 
