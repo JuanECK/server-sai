@@ -32,9 +32,9 @@ export class ActualizaMovDivisasDto {
 
         } = objeto;
 
-            if(!Concepto) return ['Falta el Concepto']
+            // if(!Concepto) return ['Falta el Concepto']
             if(!Id_ICPC) return ['Falta el Cliente']
-            if(!Id_CuentaB) return ['Falta la Cuenta']
+            // if(!Id_CuentaB) return ['Falta la Cuenta']
             if(!Monto) {Monto = null}
 
         return [ undefined, new ActualizaMovDivisasDto (

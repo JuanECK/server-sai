@@ -34,8 +34,8 @@ export class AgregarMovDivisasDto {
 
             if(!Concepto) return ['Falta el Concepto']
             if(!Id_ICPC) return ['Falta el Cliente']
-            if(!Id_CuentaB) return ['Falta la Cuenta']
-            if(!Comision) return ['Falta la Comisión ']
+            // if(!Id_CuentaB) return ['Falta la Cuenta']
+            // if(!Comision) return ['Falta la Comisión ']
             if(!Monto) { Monto = null }
 
         return [ undefined, new AgregarMovDivisasDto (

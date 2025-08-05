@@ -229,7 +229,7 @@ export class MovDivisasServicio {
         try {
 
             console.log({agregarMovInvercionDto:actualizaMovDivisasDto})
-           
+           let respData:any
          const {  Id_Mov_Div,Id_ICPC,Concepto,Id_CuentaB,Tipo_Movimiento,Monto,Comision,Observaciones,usuario,estatus, 
            
             } = actualizaMovDivisasDto
@@ -251,12 +251,21 @@ export class MovDivisasServicio {
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+            console.log(response.Respuesta)
 
             if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+
+                if( response.Respuesta == 'no' ){
+                    return respData = { status:'error', mensaje:'si no hay saldo suficiente' }
+                }
+
+                respData = { status:'error', mensaje:'Error interno del servidor' }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+                respData = { status:200, mensaje:'Edición exitosa' }
             }
 
-            return { mensaje: 'Edición exitosa' }
+            return respData
 
             throw GeneraError.servidorInterno(`error`)
 
