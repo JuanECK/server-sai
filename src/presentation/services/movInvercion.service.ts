@@ -297,9 +297,18 @@ export class MovInvercionsServicio {
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+             console.log(response)
 
-            if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+             if (response.Respuesta != 'ok') {
+
+                if( response.Respuesta == 'no' ){
+
+                    return { error:'No hay saldo suficiente en la cuenta', status:'error' }
+                }
+                  
+               return { error:'Error interno del servidor', status:'error' }
+                
+                // throw GeneraError.servidorInterno('Error interno del servidor');
             }
 
             return { mensaje: 'Edición exitosa' }
@@ -337,9 +346,18 @@ export class MovInvercionsServicio {
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+            console.log(response)
 
             if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+
+                if( response.Respuesta == 'no' ){
+
+                    return { error:'No hay saldo suficiente en la cuenta', status:'error' }
+                }
+                  
+               return { error:'Error interno del servidor', status:'error' }
+                
+                // throw GeneraError.servidorInterno('Error interno del servidor');
             }
 
             return { mensaje: 'Edición exitosa' }
