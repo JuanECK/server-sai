@@ -224,7 +224,7 @@ export class MovInmobiliarioServicio {
 
             if (response.Respuesta != 'ok') {
                 if( response.Respuesta == 'no' ){
-                    return respData = { status:'error', mensaje:'si no hay saldo suficiente' }
+                    return respData = { status:'error', mensaje:'No hay saldo suficiente para justificar tu operacion' }
                 }
                 respData = { status:'error', mensaje:'Error interno del servidor' }
                 // throw GeneraError.servidorInterno('Error interno del servidor');

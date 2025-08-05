@@ -222,7 +222,7 @@ console.log({id:id})
         try {
 
             // console.log({Files:comFiles})
-            
+             let respData:any
             if(comFiles){
                 console.log('hay comprobante :)')
                 const uploadDoc = await this.fileUploadService.ActualizaDocument(files, folder)
@@ -254,17 +254,25 @@ console.log({id:id})
 
             if (response.Respuesta != 'ok') {
 
+                if( response.Respuesta == 'no' ){
+                    return respData = { status:'error', mensaje:'No hay saldo suficiente para justificar tu operacion' }
+                }
+
+                respData = { status:'error', mensaje:'Error interno del servidor' }
+
                 // const Arr = { fileName: uploadDoc[0].fileName, fileName2: uploadDoc[1].fileName }
  
                     // this.fileUploadService.deleteFile(Arr, folder)
                   
-                throw GeneraError.servidorInterno('Error interno del servidor');
+                // throw GeneraError.servidorInterno('Error interno del servidor');
 
+            }else{
+                respData = { status:200, mensaje:'Edición exitosa' }
             }
 
 
             // console.log(agregarMovInvercionDto)
-            return { mensaje: 'El movimiento se ha almacenado' }
+            return respData
 
 
         } catch (error) {
