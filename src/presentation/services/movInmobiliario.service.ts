@@ -164,6 +164,7 @@ export class MovInmobiliarioServicio {
 
         try {
 
+            let respData:any
             let accion = { elimina:false, actualiza:false }
             let fileNames
             let Arr = {fileName:''}
@@ -219,9 +220,16 @@ export class MovInmobiliarioServicio {
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+            console.log(response)
 
             if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+                if( response.Respuesta == 'no' ){
+                    return respData = { status:'error', mensaje:'si no hay saldo suficiente' }
+                }
+                respData = { status:'error', mensaje:'Error interno del servidor' }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+                respData = { status:200, mensaje:'Edición exitosa' }
             }
 
             if(accion.actualiza){
@@ -239,7 +247,7 @@ export class MovInmobiliarioServicio {
                 if (!uploadDoc) throw GeneraError.servidorInterno('Error al intentar almacenar el documento PDF')
             }
 
-            return { mensaje: 'Edición exitosa' }
+            return respData
 
 
         } catch (error) {
