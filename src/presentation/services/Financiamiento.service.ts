@@ -331,7 +331,7 @@ console.log(respuesta)
         try {
 
             let fileNames
-
+            let respuestaApi:any
             if(comFiles){
                 console.log('hay comprobantes :)')
                 fileNames = await this.fileUploadService.getNameFileForma2( files )
@@ -370,13 +370,24 @@ console.log(respuesta)
             console.log(response)
 
             if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+
+                if (response.Respuesta == 'no'){
+                respuestaApi = { mensaje: 'No hay saldo suficiente para justificar tu operacion', status:'error' }
+                }else{
+
+                    respuestaApi = { mensaje: 'Error interno del servidor', status:'error' }
+                }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+
+                respuestaApi = { mensaje: 'El movimiento se ha registrado', status:200 }
             }
 
             const uploadDoc = await this.fileUploadService.ActualizaDocumentoSinNombreMetodo2(files, folder, fileNames)
             if (!uploadDoc) throw GeneraError.servidorInterno('Error al intentar almacenar el documento PDF')
 
-            return { mensaje: 'El movimiento se ha almacenado' }
+            return respuestaApi
+            // return { mensaje: 'El movimiento se ha almacenado' }
 
 
         } catch (error) {

@@ -309,9 +309,11 @@ export class MovInvercionsServicio {
                return { error:'Error interno del servidor', status:'error' }
                 
                 // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+
+                return { mensaje: 'Edición exitosa', status:200 }
             }
 
-            return { mensaje: 'Edición exitosa' }
 
         } catch (error) {
             console.log(error)
@@ -358,9 +360,12 @@ export class MovInvercionsServicio {
                return { error:'Error interno del servidor', status:'error' }
                 
                 // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+
+                return { mensaje: 'Edición exitosa', status:200 }
             }
 
-            return { mensaje: 'Edición exitosa' }
+            // return { mensaje: 'Edición exitosa' }
 
         } catch (error) {
             console.log(error)
