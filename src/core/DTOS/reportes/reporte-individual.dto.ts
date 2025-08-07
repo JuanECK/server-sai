@@ -35,8 +35,8 @@ export class ReporteIndividualDto {
             if(!tipoReporte) return ['Faltan datos']
             if(!usuario) return ['Faltan datos']
             if(!Id_Modelo) return ['Faltan datos']
-            if(!check1) return ['Faltan datos']
-            if(!check2) return ['Faltan datos']
+            // if(!check1) return ['Faltan datos']
+            // if(!check2) return ['Faltan datos']
 
 
         return [ undefined, new ReporteIndividualDto (
