@@ -33,6 +33,7 @@ import { MovDivisasRutas } from './movDivisas/rutas.Divisas';
 import { FinanciamientoRutas } from './Financiemiento/rutas.Financiamiento';
 import { MovEliminadosRutas } from './movEliminados/rutas.movIFacturas';
 import { ReportesRutas } from './Reportes/rutas.Reportes';
+import { MovRetiroCapitalRutas } from './retiroCapital/rutas.movRetiroCapital';
 
 //---- Clase de las rutas
 export class AppRoutes {
@@ -57,6 +58,7 @@ export class AppRoutes {
     router.use('/movimientos/Comisiones', MovComisionesRutas.routes);
     router.use('/movimientos/Divisas', MovDivisasRutas.routes);
     router.use('/movimientos/Eliminados', MovEliminadosRutas.routes);
+    router.use('/movimientos/retiroCapital', MovRetiroCapitalRutas.routes);
 
     router.use('/clientes/Publico', PublicoRutas.routes);
     router.use('/clientes/comisionistas', ComisionistasRutas.routes);

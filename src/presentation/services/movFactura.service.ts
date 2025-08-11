@@ -166,15 +166,15 @@ export class MovFacturaServicio {
 
             console.log({agregarMovInvercionDto:actualizaMovFacturaDto})
         
-             const {   Id_Mov_Fact, Id_ICPC, Monto, usuario, Estatus_Pagado,
+             const {   Id_Mov_Fact, Id_Esquema, Monto, usuario, Estatus_Pagado,
             } = actualizaMovFacturaDto
 
-            const sql = 'sp_actualiza_movFacturacion  :Id_Mov_Fact, :Id_ICPC, :Monto, :usuario, :Estatus_Pagado'
+            const sql = 'sp_actualiza_movFacturacion  :Id_Mov_Fact, :Id_Esquema, :Monto, :usuario, :Estatus_Pagado'
 
             const registro = await db.query(sql, {
                 replacements: {
                     Id_Mov_Fact: Id_Mov_Fact,
-                    Id_ICPC: Id_ICPC,
+                    Id_Esquema: Id_Esquema,
                     Monto: Monto,
                     usuario: usuario,
                     Estatus_Pagado: Estatus_Pagado,
@@ -208,14 +208,14 @@ export class MovFacturaServicio {
                 
             console.log({Datos:agregarMovFacturaDto})
 
-             const {   Id_ICPC, Monto, usuario
+             const {   Id_Esquema, Monto, usuario
             } = agregarMovFacturaDto
 
-            const sql = 'sp_inserta_movFacturacion :Id_ICPC,:Monto,:usuario'
+            const sql = 'sp_inserta_movFacturacion :Id_Esquema,:Monto,:usuario'
 
             const registro = await db.query(sql, {
                 replacements: {
-                    Id_ICPC: Id_ICPC,
+                    Id_Esquema: Id_Esquema,
                     Monto: Monto,
                     usuario: usuario,
                 }
