@@ -264,7 +264,7 @@ export class RetiroCapitalServicio {
                 }
 
                 if( response.Respuesta == 'saldo' ){
-                    return respData = { mensaje:'La operacion no se pudo completar, sin saldo en la cuenta', status:'error' }
+                    return respData = { mensaje:'La operacion no se pudo completar, Saldo insuficiente', status:'error' }
                 }
                   
                 // throw GeneraError.servidorInterno('Error interno del servidor');
@@ -309,7 +309,7 @@ export class RetiroCapitalServicio {
                 }
 
                 if( response.Respuesta == 'saldo' ){
-                    return respData = { mensaje:'La operacion no se pudo completar, sin saldo en la cuenta', status:'error' }
+                    return respData = { mensaje:'La operacion no se pudo completar, Saldo insuficiente', status:'error' }
                 }
                   
                 // throw GeneraError.servidorInterno('Error interno del servidor');
