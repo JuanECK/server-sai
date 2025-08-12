@@ -138,6 +138,8 @@ export class MovInmobiliarioServicio {
 
             console.log(valores)
 
+            let respData:any
+
             const { Id, estatus, usuario } = valores
 
             const sql = 'sp_desactiva_movInmobiliaro :Id_Mov_Inmo, :usuario, :estatus'
@@ -145,12 +147,24 @@ export class MovInmobiliarioServicio {
             const registro = await db.query( sql, { replacements:{ Id_Mov_Inmo:Id, usuario:usuario, estatus:estatus} } )
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+            console.log(typeof response.Respuesta)
 
             if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+                if( typeof response.Respuesta == 'number' ){
+                    return respData = { status:'error', mensaje:'Operacion Rechazada. Elimianr este registro pondría la cuenta en un saldo negativo' }
+                }
+                respData = { status:'error', mensaje:'Error interno del servidor' }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+                respData = { status:200, mensaje:'Registro Eliminado' }
             }
+
+            // if (response.Respuesta != 'ok') {
+            //     throw GeneraError.servidorInterno('Error interno del servidor');
+            // }
        
-            return { mensaje: 'Registro Eliminado' }
+            // return { mensaje: 'Registro Eliminado' }
+            return respData
 
         } catch (error) {
 
