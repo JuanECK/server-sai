@@ -305,6 +305,11 @@ export class MovInvercionsServicio {
 
                     return { error:'No hay saldo suficiente en la cuenta', status:'error' }
                 }
+
+                if( response.Respuesta == 'diferencia' ){
+
+                    return { error:'La diferencia es menos a la justificación', status:'error' }
+                }
                   
                return { error:'Error interno del servidor', status:'error' }
                 
@@ -355,6 +360,11 @@ export class MovInvercionsServicio {
                 if( response.Respuesta == 'no' ){
 
                     return { error:'No hay saldo suficiente en la cuenta', status:'error' }
+                }
+                
+                if( response.Respuesta == 'diferencia' ){
+
+                    return { error:'La diferencia es menos a la justificación', status:'error' }
                 }
                   
                return { error:'Error interno del servidor', status:'error' }
@@ -471,6 +481,11 @@ export class MovInvercionsServicio {
                 if( response.Respuesta == 'no' ){
 
                     return { error:'No hay saldo suficiente en la cuenta', status:'error' }
+                }
+
+                if( response.Respuesta == 'diferencia' ){
+
+                    return { error:'La diferencia es menos a la justificación', status:'error' }
                 }
                   
                return { error:'Error interno del servidor', status:'error' }

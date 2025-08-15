@@ -10,6 +10,7 @@ export class AgregarMovComisionesDto {
         public Monto: string,
         public Observaciones: string,
         public usuario: string,
+        public Id_Factura: string,
         // public estatus: string,
 
     ) { }
@@ -25,10 +26,11 @@ export class AgregarMovComisionesDto {
             Monto,
             Observaciones,
             usuario,
+            Id_Factura,
             // estatus,
         } = objeto;
 
-            if(!Id_ModeloNegocio) return ['Falta el Modelo de negocio']
+            // if(!Id_ModeloNegocio) return ['Falta el Modelo de negocio']
             if(!Id_ICPC) return ['Falta el Comisionista']
             if(!Id_CuentaB) return ['Falta la Cuenta asociada']
             if(!Monto) return ['Falta el Monto']
@@ -42,6 +44,7 @@ export class AgregarMovComisionesDto {
             Monto,
             Observaciones,
             usuario,
+            Id_Factura,
             // estatus,
         )]
     }

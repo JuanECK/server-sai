@@ -17,6 +17,7 @@ export class MovComisionesRutas {
         router.get('/cargaDataInicio', controlador.getDataInicio)
         router.get('/cargaHistoricoComisiones', controlador.getHistorico)
         router.post('/cargaComisionista', controlador.getComisionistaComision)
+        router.post('/cargaTipoComisionista', controlador.getTipoComisiones)
         router.post('/busqueda', controlador.getBusqueda)
         router.post('/eliminarRegistro', controlador.setEliminarRegistro)
         router.post('/cargaMovComisiones', controlador.cargaMovComisionesId)

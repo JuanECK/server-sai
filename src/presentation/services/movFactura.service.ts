@@ -39,9 +39,11 @@ export class MovFacturaServicio {
             const array:Array<any>[] = []
             const Esquema = 'sp_carga_Esquema_Facturacion'
             const Facturacion = 'sp_carga_cuentas_Facturacion'
+            const cuentas = 'sp_carga_cuentas_comision_list'
             const listaproveedor = await db.query(Esquema)
             const listaFacturacion = await db.query(Facturacion)
-            array.push(listaproveedor[0],listaFacturacion[0])
+            const listacuentas = await db.query(cuentas)
+            array.push(listaproveedor[0],listaFacturacion[0],listacuentas[0])
             return array
 
         } catch (error) {
@@ -166,10 +168,10 @@ export class MovFacturaServicio {
 
             console.log({agregarMovInvercionDto:actualizaMovFacturaDto})
         
-             const {   Id_Mov_Fact, Id_Esquema, Monto, usuario, Estatus_Pagado,
+             const {   Id_Mov_Fact, Id_Esquema, Monto, usuario, Estatus_Pagado, Observaciones, Id_CuentaB
             } = actualizaMovFacturaDto
 
-            const sql = 'sp_actualiza_movFacturacion  :Id_Mov_Fact, :Id_Esquema, :Monto, :usuario, :Estatus_Pagado'
+            const sql = 'sp_actualiza_movFacturacion  :Id_Mov_Fact, :Id_Esquema, :Monto, :usuario, :Estatus_Pagado, :Observaciones, :Id_CuentaB'
 
             const registro = await db.query(sql, {
                 replacements: {
@@ -178,10 +180,13 @@ export class MovFacturaServicio {
                     Monto: Monto,
                     usuario: usuario,
                     Estatus_Pagado: Estatus_Pagado,
+                    Observaciones: Observaciones,
+                    Id_CuentaB: Id_CuentaB
                 }
             })
 
             const response = JSON.parse(JSON.stringify(registro[0][0]))
+            console.log(response)
 
             if (response.Respuesta != 'ok') {
                 throw GeneraError.servidorInterno('Error interno del servidor');
@@ -208,16 +213,18 @@ export class MovFacturaServicio {
                 
             console.log({Datos:agregarMovFacturaDto})
 
-             const {   Id_Esquema, Monto, usuario
+             const {   Id_Esquema, Monto, usuario, Observaciones, Id_CuentaB
             } = agregarMovFacturaDto
 
-            const sql = 'sp_inserta_movFacturacion :Id_Esquema,:Monto,:usuario'
+            const sql = 'sp_inserta_movFacturacion :Id_Esquema, :Monto, :usuario, :Observaciones, :Id_CuentaB'
 
             const registro = await db.query(sql, {
                 replacements: {
                     Id_Esquema: Id_Esquema,
                     Monto: Monto,
                     usuario: usuario,
+                    Observaciones: Observaciones,
+                    Id_CuentaB: Id_CuentaB,
                 }
             })
 
@@ -257,16 +264,15 @@ export class MovFacturaServicio {
                 
             console.log({Datos:cambiaEstatusPagadoDto})
 
-             const {    Id_Mov_Fact, estatus_pagado, Id_CuentaB, usuario
-            } = cambiaEstatusPagadoDto
+             const {    Id_Mov_Fact, estatus_pagado, usuario } = cambiaEstatusPagadoDto
 
-            const sql = 'sp_cambia_movFacturacion_pagado :Id_Mov_Fact, :estatus_pagado, :Id_CuentaB, :usuario'
+            const sql = 'sp_cambia_movFacturacion_pagado :Id_Mov_Fact, :estatus_pagado, :usuario '
+            // const sql = 'sp_cambia_movFacturacion_pagado :Id_Mov_Fact, :estatus_pagado, :Id_CuentaB, :usuario'
 
             const registro = await db.query(sql, {
                 replacements: {
                     Id_Mov_Fact: Id_Mov_Fact,
                     estatus_pagado: estatus_pagado,
-                    Id_CuentaB: Id_CuentaB,
                     usuario: usuario,
                 }
             })

@@ -7,7 +7,8 @@ export class AgregarMovFacturaDto {
         public Id_Esquema:string,
         public Monto:string,
         public usuario:string,
-        // public estatus:string,
+        public Observaciones:string,
+        public Id_CuentaB:string,
 
     ) { }
 
@@ -18,6 +19,8 @@ export class AgregarMovFacturaDto {
             Id_Esquema,
             Monto,
             usuario,
+            Observaciones,
+            Id_CuentaB
             // estatus,
         } = objeto;
 
@@ -29,6 +32,8 @@ export class AgregarMovFacturaDto {
             Id_Esquema,
             Monto,
             usuario,
+            Observaciones,
+            Id_CuentaB
             // estatus,
         )]
     }

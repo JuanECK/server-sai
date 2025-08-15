@@ -73,6 +73,7 @@ export class MovDivisasServicio {
             const listaConcepto = await db.query(concepto, { replacements:{ Id_ICPC : idcp} })
             const rawData: any =  listaConcepto[0][0]
             const data = JSON.parse(rawData.Resultado)
+            console.log(data)
 
             // console.log(JSON.parse(rawData.Resultado).Conceptos)
 

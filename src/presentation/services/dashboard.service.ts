@@ -66,7 +66,7 @@ export class DashboardServicio {
 
             if (Respuesta != 'ok') {
                 if (Respuesta == 'no'){
-                respuestaApi = { mensaje: 'No puedes realizar tu operacion' }
+                respuestaApi = { mensaje: 'El incremento debe ser superior a tu saldo actual' }
                 }else{
 
                     respuestaApi = { mensaje: 'Error interno del servidor' }

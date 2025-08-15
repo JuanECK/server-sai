@@ -8,6 +8,8 @@ export class ActualizaMovFacturaDto {
         public Monto:string,
         public usuario:string,
         public Estatus_Pagado:string,
+        public Observaciones:string,
+        public Id_CuentaB:string,
 
     ) { }
 
@@ -19,6 +21,8 @@ export class ActualizaMovFacturaDto {
             Monto,
             usuario,
             Estatus_Pagado,
+            Observaciones,
+            Id_CuentaB
         } = objeto;
 
             if(!Id_Esquema) return ['Falta el Esquema']
@@ -30,6 +34,8 @@ export class ActualizaMovFacturaDto {
             Monto,
             usuario,
             Estatus_Pagado,
+            Observaciones,
+            Id_CuentaB
         )]
     }
 }

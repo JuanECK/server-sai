@@ -31,14 +31,18 @@ export class MovComisionesServicio {
 
             const array:Array<any>[] = []
             
-            const modeloNegocio = 'sp_carga_modeloNegocio_comision'
+            // const modeloNegocio = 'sp_carga_modeloNegocio_comision'
             const comisionista = 'sp_carga_comisionista_comision :tipoMovimineto'
             const cuentas = 'sp_carga_cuentas_comision_list'
-            const listaNegocio = await db.query(modeloNegocio)
-            const listacomisionista = await db.query(comisionista, {replacements:{ tipoMovimineto:'I' }})
+
+            // const listaNegocio = await db.query(modeloNegocio)
+            // const listacomisionista = await db.query(comisionista, {replacements:{ tipoMovimineto:'I' }}) || []
             const listacuentas = await db.query(cuentas)
 
-            array.push(listaNegocio[0],listacomisionista[0],listacuentas[0])
+            array.push(
+                // listaNegocio[0],
+                // listacomisionista[0],
+                listacuentas[0])
             
             return array
 
@@ -49,12 +53,35 @@ export class MovComisionesServicio {
         }
     }
 
-        public async getComisionistaComision(comisionista:string) {
-            console.log(comisionista)
+    public async getComisionistaComision(Id_Factura :string) {
+            console.log(Id_Factura )
         try {
             
             const comisionistas = 'sp_carga_comisionista_comision :tipoMovimineto'
-            const listacomisionista = await db.query(comisionistas, {replacements:{ tipoMovimineto:comisionista }})
+            const listacomisionista = await db.query(comisionistas, {replacements:{ tipoMovimineto:Id_Factura }})
+
+            const rawData: any =  listacomisionista[0][0]
+            const data = JSON.parse(rawData.Resultado)
+
+            // console.log(data.Resultado)
+            
+            return [data.Resultado]
+
+        } catch (error) {
+
+            console.log(error);
+            throw GeneraError.servidorInterno(`${error}`)
+        }
+    }
+
+    public async getTipoComisiones(id:string) {
+            console.log(id)
+        try {
+            
+            const comisionistas = 'sp_carga_modeloNegocio_comision :TipoMovimiento '
+            const listacomisionista = await db.query(comisionistas, {replacements:{ TipoMovimiento :id  }})
+
+
             console.log(listacomisionista)
             
             return listacomisionista
@@ -65,6 +92,7 @@ export class MovComisionesServicio {
             throw GeneraError.servidorInterno(`${error}`)
         }
     }
+
 
     public async getBusqueda( criterio:string ) {
         try {
@@ -165,7 +193,7 @@ export class MovComisionesServicio {
 
             console.log({agregarMovInvercionDto:actualizaMovComisionesDto})
         
-           
+           let respuestaApi:any
              const {   Id_Mov_Com, Id_ModeloNegocio, Id_ICPC, Id_CuentaB, Tipo_Movimiento, Monto, Observaciones, usuario, estatus,
             } = actualizaMovComisionesDto
 
@@ -188,13 +216,25 @@ export class MovComisionesServicio {
             const response = JSON.parse(JSON.stringify(registro[0][0]))
             console.log(response)
 
-            if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+             if (response.Respuesta != 'ok') {
+                if (response.Respuesta == 'no'){
+                return { mensaje: 'No hay saldo suficiente para justificar tu operacion', status:'error' }
+                }else{
+
+                    return { mensaje: 'Error interno del servidor', status:'error'}
+                }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+            }else{
+                return { mensaje: 'Edición exitosa',status:200 }
             }
 
-            return { mensaje: 'Edición exitosa' }
+            // if (response.Respuesta != 'ok') {
+            //     throw GeneraError.servidorInterno('Error interno del servidor');
+            // }
 
-            throw GeneraError.servidorInterno(`error`)
+            // return { mensaje: 'Edición exitosa' }
+
+            // throw GeneraError.servidorInterno(`error`)
 
         } catch (error) {
             console.log(error)
@@ -211,10 +251,10 @@ export class MovComisionesServicio {
             let respuestaApi:any
             console.log({Datos:agregarMovComisionesDto})
 
-             const {  Id_ModeloNegocio, Id_ICPC, Id_CuentaB, Tipo_Movimiento, Monto, Observaciones, usuario, 
+             const {  Id_ModeloNegocio, Id_ICPC, Id_CuentaB, Tipo_Movimiento, Monto, Observaciones, usuario, Id_Factura,
             } = agregarMovComisionesDto
 
-            const sql = 'sp_inserta_movComision :Id_ModeloNegocio, :Id_ICPC, :Id_CuentaB, :Tipo_Movimiento, :Monto, :Observaciones, :usuario'
+            const sql = 'sp_inserta_movComision :Id_ModeloNegocio, :Id_ICPC, :Id_CuentaB, :Tipo_Movimiento, :Monto, :Observaciones, :usuario, :Id_Factura'
 
             const registro = await db.query(sql, {
                 replacements: {
@@ -225,6 +265,7 @@ export class MovComisionesServicio {
                     Monto:Monto,
                     Observaciones:Observaciones,
                     usuario:usuario,
+                    Id_Factura:Id_Factura,
                 }
             })
 
