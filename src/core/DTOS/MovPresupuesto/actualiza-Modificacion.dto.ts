@@ -7,7 +7,7 @@ export class ModificacionPresupuestoDto {
         public tipo:string,
         public observaciones:string,
         public usuario:string,
-        // public estatus:string,
+        // public Observaciones:string,
 
     ) { }
 
@@ -18,6 +18,7 @@ export class ModificacionPresupuestoDto {
             tipo,
             observaciones,
             usuario,
+            // Observaciones
         } = objeto;
 
             if(!tipo) return ['Falta el Tipo de Modificacion']
@@ -28,6 +29,7 @@ export class ModificacionPresupuestoDto {
             tipo,
             observaciones,
             usuario,
+            // Observaciones
         )]
     }
 }

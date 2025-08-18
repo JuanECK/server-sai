@@ -7,7 +7,7 @@ export class AgregarAbonoDto {
         public id_cuentaB:string,
         public monto:string,
         public usuario:string,
-        // public estatus:string,
+        public Observaciones:string,
 
     ) { }
 
@@ -18,6 +18,7 @@ export class AgregarAbonoDto {
             id_cuentaB,
             monto,
             usuario,
+            Observaciones
             // estatus,
         } = objeto;
 
@@ -29,6 +30,7 @@ export class AgregarAbonoDto {
             id_cuentaB,
             monto,
             usuario,
+            Observaciones
             // estatus,
         )]
     }

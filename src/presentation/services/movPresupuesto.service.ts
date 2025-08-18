@@ -210,10 +210,10 @@ export class MovPresupuestoServicio {
 
             console.log({AbonoDto:ActualizaAbonoDto})
         
-             const {  id_abono, id_cuentaB, monto, usuario,
+             const {  id_abono, id_cuentaB, monto, usuario, Observaciones
             } = actualizaAbonoDto
 
-            const sql = 'sp_actualiza_abono  :id_abono, :id_cuentaB, :monto, :usuario'
+            const sql = 'sp_actualiza_abono  :id_abono, :id_cuentaB, :monto, :usuario, :Observaciones'
 
             const registro = await db.query(sql, {
                 replacements: {
@@ -221,6 +221,7 @@ export class MovPresupuestoServicio {
                     id_cuentaB: id_cuentaB,
                     monto: monto,
                     usuario: usuario,
+                    Observaciones:Observaciones
                 }
             })
 
@@ -248,16 +249,17 @@ export class MovPresupuestoServicio {
                 
             console.log({Datos:agregarAbonoDto})
 
-             const {   id_cuentaB, monto, usuario
+             const {   id_cuentaB, monto, usuario, Observaciones
             } = agregarAbonoDto
 
-            const sql = 'sp_inserta_abono :monto,:id_cuentaB,:usuario'
+            const sql = 'sp_inserta_abono :monto,:id_cuentaB,:usuario, :Observaciones'
 
             const registro = await db.query(sql, {
                 replacements: {
                     monto: monto,
                     id_cuentaB: id_cuentaB,
                     usuario: usuario,
+                    Observaciones:Observaciones
                 }
             })
 
