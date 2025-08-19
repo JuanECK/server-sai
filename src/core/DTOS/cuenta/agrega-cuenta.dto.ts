@@ -35,7 +35,7 @@ export class AgregaCuentaDto {
             if(!nombreBanco) return ['Falta la Institución Bancaria']
             if(!alias) return ['Falta el Alias de la cuenta']
             if(!modelo) return ['Falta el  Modelo de Negocio']
-            if(!clabe) return ['Falta una Divisa']
+            // if(!clabe) return ['Falta una Divisa']
 
             // clabe.replace(/\D/g, "");
 

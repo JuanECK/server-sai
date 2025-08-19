@@ -242,6 +242,10 @@ console.log(criterio)
     }
 
     formatoSalfoPeticion( saldo:string ){
+
+        if(saldo == '0'){
+            return saldo
+        }
         return saldo.replace(/,/g, '');
       }
 }

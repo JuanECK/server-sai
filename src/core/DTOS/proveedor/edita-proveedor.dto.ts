@@ -48,7 +48,10 @@ export class EditaProveedorDto {
         } = objeto;
 
             if(!nombre) return ['Falta  Nombre o Razón social']
-            if(!regularExpsEmail.email.test( correo )) return ['El e-mail no es valido']
+            if( correo ){
+                if(!regularExpsEmail.email.test( correo )) return ['El e-mail no es valido']
+            }
+            // if(!regularExpsEmail.email.test( correo )) return ['El e-mail no es valido']
 
         return [ undefined, new EditaProveedorDto (
             nombre,
