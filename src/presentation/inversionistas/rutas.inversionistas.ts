@@ -24,6 +24,7 @@ export class InversionistasRutas {
         
         router.get('/busquedaAll', controlador.BusquedaAll)
         router.post('/busqueda', controlador.getBusqueda)
+        router.post('/DataInicial', controlador.getDataInicial)
         // router.post('/registraInversionista', controlador.registraInversionista)
         router.post('/eliminarRegistro', controlador.setEliminarRegistro)
         router.post('/cargaInversionista', controlador.cargaInversionistaId)

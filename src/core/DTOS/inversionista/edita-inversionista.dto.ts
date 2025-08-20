@@ -45,6 +45,7 @@ export class EdicionInversionistaDto {
         public Id_Municipio: string,
         public CP: string,
         public estatus: string,
+        public Id_Pais: string,
     ) { }
 
     static crear(objeto: { [key: string]: any }): [string?, EdicionInversionistaDto?] {
@@ -91,6 +92,7 @@ export class EdicionInversionistaDto {
             Id_Municipio,
             CP,
             estatus,
+            Id_Pais,
         } = objeto;
 
             if(!nombre) return ['Falta  Nombre o Razón social']
@@ -150,6 +152,7 @@ export class EdicionInversionistaDto {
             Id_Municipio,
             CP,
             estatus,
+            Id_Pais,
         )]
     }
 }

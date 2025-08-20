@@ -44,6 +44,7 @@ export class AgregarInversionistaDto {
         public Id_Estado: string,
         public Id_Municipio: string,
         public CP: string,
+        public Id_Pais: string,
         // public estatus: string,
     ) { }
 
@@ -90,6 +91,7 @@ export class AgregarInversionistaDto {
             Id_Estado,
             Id_Municipio,
             CP,
+            Id_Pais
             // estatus,
         } = objeto;
 
@@ -149,6 +151,7 @@ export class AgregarInversionistaDto {
             Id_Estado,
             Id_Municipio,
             CP,
+            Id_Pais
             // estatus,
         )]
     }

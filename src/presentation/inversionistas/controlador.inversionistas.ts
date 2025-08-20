@@ -34,6 +34,11 @@ export class InversionistasControlador {
         // res.json('exito')
 
     }
+    getDataInicial = ( req:Request, res:Response ) =>{
+        this.inversionistasServicio.getDataInicial()
+        .then(( mundo ) => res.json( mundo ))
+        .catch( error => this.manejadorErrores( error, res ) )
+    }
 
     BusquedaAll = ( req:Request, res:Response ) =>{
         this.inversionistasServicio.BusquedaAll()
