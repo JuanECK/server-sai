@@ -117,10 +117,18 @@ export class PublicoServicio {
             const response = JSON.parse(JSON.stringify(registro[0][0]))
 
             if (response.Respuesta != 'ok') {
-                throw GeneraError.servidorInterno('Error interno del servidor');
+
+                if ( response.Respuesta == 'No' ){
+                    return { mensaje:'El proveedor ya tiene movimientos asiciados', status:'error' }
+                }
+
+                return { mensaje:'Error interno del servidor', status:'error' }
+                // throw GeneraError.servidorInterno('Error interno del servidor');
+
             }
 
-            return { mensaje: 'Registro Eliminado' }
+            return { mensaje: 'Registro Eliminado', status:200  }
+
 
         } catch (error) {
 
