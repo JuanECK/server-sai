@@ -20,6 +20,8 @@ export class AgregaPublicoDto {
         public tipoClienteDivisa : string,
         public tipoDivisa : string,
         public saldoApertura : string,
+        public utilidad : string,
+        public comision : string,
 
     ) { }
 
@@ -40,6 +42,8 @@ export class AgregaPublicoDto {
             tipoClienteDivisa,
             tipoDivisa,
             saldoApertura,
+            utilidad,
+            comision,
             // Id_ICPC,
             // Estatus,
 
@@ -64,6 +68,8 @@ export class AgregaPublicoDto {
             tipoClienteDivisa,
             tipoDivisa,
             saldoApertura,
+            utilidad,
+            comision,
             // Estatus,
         )]
     }

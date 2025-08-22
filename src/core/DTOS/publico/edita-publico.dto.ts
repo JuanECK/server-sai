@@ -20,6 +20,8 @@ export class EditaPublicoDto {
         public tipoClienteDivisa : string,
         public tipoDivisa : string,
         public saldoApertura : string,
+        public utilidad : string,
+        public comision : string,
 
     ) { }
 
@@ -42,6 +44,8 @@ export class EditaPublicoDto {
             tipoClienteDivisa,
             tipoDivisa,
             saldoApertura,
+            utilidad,
+            comision,
 
         } = objeto;
             if(!nombre) return ['Falta  Nombre o Razón social']
@@ -65,6 +69,8 @@ export class EditaPublicoDto {
             tipoClienteDivisa,
             tipoDivisa,
             saldoApertura,
+            utilidad,
+            comision,
         )]
     }
 }

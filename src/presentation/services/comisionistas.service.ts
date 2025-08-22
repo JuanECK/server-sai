@@ -144,7 +144,7 @@ export class ComisionistasServicio {
             if (response.Respuesta != 'ok') {
 
                 if ( response.Respuesta == 'No' ){
-                    return { mensaje:'El proveedor ya tiene movimientos asiciados', status:'error' }
+                    return { mensaje:'El Comisionista ya tiene movimientos asiciados', status:'error' }
                 }
 
                 return { mensaje:'Error interno del servidor', status:'error' }

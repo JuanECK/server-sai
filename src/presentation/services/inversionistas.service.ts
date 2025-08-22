@@ -182,7 +182,7 @@ export class InversionistasServicio {
             if (response.Respuesta != 'ok') {
 
                 if ( response.Respuesta == 'No' ){
-                    return { mensaje:'El proveedor ya tiene movimientos asiciados', status:'error' }
+                    return { mensaje:'El Inversionista ya tiene movimientos asiciados', status:'error' }
                 }
 
                 return { mensaje:'Error interno del servidor', status:'error' }

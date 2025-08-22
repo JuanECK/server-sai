@@ -93,6 +93,7 @@ export class PublicoServicio {
             // console.log(busqueda)
 
             const data  = JSON.parse(JSON.stringify(busqueda[0]))
+            console.log(data)
 
             return data
 
@@ -119,7 +120,7 @@ export class PublicoServicio {
             if (response.Respuesta != 'ok') {
 
                 if ( response.Respuesta == 'No' ){
-                    return { mensaje:'El proveedor ya tiene movimientos asiciados', status:'error' }
+                    return { mensaje:'El Cliente ya tiene movimientos asiciados', status:'error' }
                 }
 
                 return { mensaje:'Error interno del servidor', status:'error' }
@@ -145,10 +146,10 @@ export class PublicoServicio {
             
             console.log({Datos:editaPublicoDto})
 
-            const {   nombre, fisica_moral, correo, telefono, Id_ICPC, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta, Estatus, tipoClienteDivisa, tipoDivisa, saldoApertura
+            const {   nombre, fisica_moral, correo, telefono, Id_ICPC, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta, Estatus, tipoClienteDivisa, tipoDivisa, saldoApertura, utilidad, comision
              } = editaPublicoDto
 
-            const sql =  'sp_actualiza_info_publico :nombre, :fisica_moral, :correo, :telefono, :Id_ICPC, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta, :Estatus, :tipoClienteDivisa, :tipoDivisa, :saldoApertura'
+            const sql =  'sp_actualiza_info_publico :nombre, :fisica_moral, :correo, :telefono, :Id_ICPC, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta, :Estatus, :tipoClienteDivisa, :tipoDivisa, :saldoApertura, :utilidad, :comision'
 
             const registro = await db.query(sql, {
                 replacements: {
@@ -167,6 +168,8 @@ export class PublicoServicio {
                     tipoClienteDivisa: tipoClienteDivisa,
                     tipoDivisa: tipoDivisa,
                     saldoApertura: saldoApertura,
+                    utilidad:utilidad,
+                    comision:comision,
                 }
             })
 
@@ -190,10 +193,10 @@ export class PublicoServicio {
 
             console.log({Datos:agregarProveedorDto})
 
-            const {  nombre, fisica_moral, correo, telefono, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta, tipoClienteDivisa, tipoDivisa, saldoApertura,
+            const {  nombre, fisica_moral, correo, telefono, usuario, Banco_cuenta, CLABE, FINCASH, Banco_tarjeta, tarjeta, tipoClienteDivisa, tipoDivisa, saldoApertura, utilidad, comision 
              } = agregarProveedorDto
 
-            const sql =  'sp_inserta_publico   :nombre, :fisica_moral, :correo, :telefono, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta, :tipoClienteDivisa, :tipoDivisa, :saldoApertura'
+            const sql =  'sp_inserta_publico   :nombre, :fisica_moral, :correo, :telefono, :usuario, :Banco_cuenta, :CLABE, :FINCASH, :Banco_tarjeta, :tarjeta, :tipoClienteDivisa, :tipoDivisa, :saldoApertura, :utilidad, :comision '
              
 
             const registro = await db.query(sql, {
@@ -211,6 +214,9 @@ export class PublicoServicio {
                     tipoClienteDivisa: tipoClienteDivisa,
                     tipoDivisa: tipoDivisa,
                     saldoApertura: saldoApertura,
+                    utilidad:utilidad,
+                    comision:comision,
+
                 }
             })
 
